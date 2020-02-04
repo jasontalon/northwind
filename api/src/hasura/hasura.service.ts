@@ -14,21 +14,23 @@ export class HasuraService {
   }
 
   async query(query: string, variables: any = null) {
-    const { data } = await this.httpService
-      .post(
-        this.url,
-        {
-          query,
-          variables,
-        },
-        {
-          headers: {
-            'x-hasura-admin-secret': this.secret,
+    const { data: { data = null, errors = null } = {} } = await (<any>(
+      this.httpService
+        .post(
+          this.url,
+          {
+            query,
+            variables,
           },
-        },
-      )
-      .toPromise();
-
+          {
+            headers: {
+              'x-hasura-admin-secret': this.secret,
+            },
+          },
+        )
+        .toPromise()
+    ));
+    if (errors) throw errors;
     return data;
   }
 }

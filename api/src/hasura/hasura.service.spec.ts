@@ -22,12 +22,17 @@ describe('HasuraService', () => {
   it('should fetch data', async () => {
     const data = await service.query(
       `query  {
-      accounts {
-        username
-        firstName
-        lastName
+        users {
+          userid
+          passwordSalt
+          passwordHash
+          refreshToken
+          role
+          lastLoginAt
+          createdAt
+        }
       }
-    }
+      
     `,
     );
 
