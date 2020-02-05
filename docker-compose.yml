@@ -44,7 +44,7 @@ services:
       GQL_URL: http://graphql-engine:8080/v1/graphql
       GQL_SECRET: password
       JWT_SECRET: password
-    command: ["npm", "run", "docker:debug"]
+    command: ["npm", "run", "docker:debug"] #debug mode
 volumes:
   db_data:
   backups:
