@@ -30,8 +30,8 @@ export class UsersService {
     await this.hasuraService.query(query, variables);
   }
 
-  async updateSignInTime(userid: string) {
-    const query = `mutation { update_users(where: {userid: {_eq: "${userid}"}}, _set: {lastLoginAt: "${moment
+  async updateSignIn(userid: string, refreshToken: string) {
+    const query = `mutation { update_users(where: {userid: {_eq: "${userid}"}}, _set: {refreshToken: "${refreshToken}", lastLoginAt: "${moment
       .utc()
       .format()}"}) { affected_rows } }`;
 

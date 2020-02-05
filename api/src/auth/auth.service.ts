@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { saltHashPassword, sha512 } from './auth.utils';
 import { JwtService } from '@nestjs/jwt';
+const uuidv4 = require('uuid/v4');
 
 @Injectable()
 export class AuthService {
@@ -32,9 +33,11 @@ export class AuthService {
 
   async login(user: any) {
     const { userid, role } = await this.usersService.find(user.userid);
-    await this.usersService.updateSignInTime(userid);
+    const refreshToken = uuidv4();
+    await this.usersService.updateSignIn(userid, refreshToken);
     return {
       access_token: this.jwtService.sign({ userid, role }),
+      refresh_token: refreshToken
     };
   }
 }
