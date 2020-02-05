@@ -1,15 +1,15 @@
 module.exports = {
-  up :(queryInterface, Sequelize) => {
-    return queryInterface.createTable('accounts', {      
-      username: {
-        allowNull: false,        
+  /**
+   * @typedef {import('sequelize').Sequelize} Sequelize
+   * @typedef {import('sequelize').QueryInterface} QueryInterface
+   * @param {QueryInterface} queryInterface
+   * * @param {Sequelize} Sequelize
+   */
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable("users", {
+      userid: {
+        allowNull: false,
         primaryKey: true,
-        type: Sequelize.STRING
-      },
-      firstName: {
-        type: Sequelize.STRING
-      },
-      lastName: {
         type: Sequelize.STRING
       },
       passwordHash: {
@@ -21,14 +21,23 @@ module.exports = {
       role: {
         type: Sequelize.STRING
       },
+      refreshToken: {
+        type: Sequelize.STRING,
+        unique: true
+      },
+      lastLoginAt: {
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,        
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal("NOW()")
       }
-    });    
+    });
+
+    return Promise.resolve();
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('accounts');
+    return queryInterface.dropTable("users");
   }
-}
+};

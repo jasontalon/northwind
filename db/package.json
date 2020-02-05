@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "up" : "sequelize-cli db:migrate",
-    "down" : "sequelize-cli db:migrate:undo"
+    "down" : "sequelize-cli db:migrate:undo",
+    "seed:all" : "sequelize-cli db:seed:all",
+    "seed:undo" : "sequelize-cli db:seed:undo"
   },
   "keywords": [],
   "author": "",
