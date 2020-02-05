@@ -5,6 +5,7 @@ import {
   UseGuards,
   Request,
   Get,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -12,10 +13,7 @@ import { AuthService } from './auth.service';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Get()
-  hello() {
-    return 'hello';
-  }
+
   @Post('signup')
   async signUp(
     @Body('username') userid: string,
@@ -35,5 +33,16 @@ export class AuthController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(200)
+  @Get('hasura')
+  async validateHasura(@Request() req) {
+    const hasuraVariables = {
+      'X-Hasura-User-Id': req.user.userid,
+      'X-Hasura-Role': req.user.role,
+    };
+    return hasuraVariables;
   }
 }

@@ -17,7 +17,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+
+    "docker:debug": "nodemon --inspect=0.0.0.0 dist/main.js"
   },
   "dependencies": {
     "@nestjs/common": "^6.10.14",
@@ -41,7 +43,6 @@
     "@nestjs/cli": "^6.13.2",
     "@nestjs/schematics": "^6.8.1",
     "@nestjs/testing": "^6.10.14",
-    "@types/express": "^4.17.2",
     "@types/jest": "25.1.1",
     "@types/node": "^13.1.6",
     "@types/passport-jwt": "^3.0.3",
@@ -53,6 +54,7 @@
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-import": "^2.19.1",
     "jest": "^24.9.0",
+    "nodemon": "^2.0.2",
     "prettier": "^1.18.2",
     "supertest": "^4.0.2",
     "ts-jest": "25.1.0",
@@ -74,5 +76,10 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "dist"
+    ]
   }
 }

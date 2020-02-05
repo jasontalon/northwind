@@ -2,7 +2,7 @@ import { Module, HttpModule } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
 import { PassportModule } from '@nestjs/passport';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './auth.constants';
 import { HasuraService } from 'src/hasura/hasura.service';
 import { ConfigModule } from '@nestjs/config';

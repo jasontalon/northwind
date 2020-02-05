@@ -12,7 +12,7 @@ export class AuthService {
   async validateUser(userid: string, password: string): Promise<any> {
     const user = await this.usersService.find(userid);
     if (!user) return null;
-    
+
     const hashedPassword = sha512(password, user.passwordSalt);
 
     if (hashedPassword != user.passwordHash) return null;
@@ -31,10 +31,10 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const { userid } = user;
+    const { userid, role } = await this.usersService.find(user.userid);
     await this.usersService.updateSignInTime(userid);
     return {
-      access_token: this.jwtService.sign(user),
+      access_token: this.jwtService.sign({ userid, role }),
     };
   }
 }
