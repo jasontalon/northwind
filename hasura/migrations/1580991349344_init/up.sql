@@ -153,74 +153,6 @@ CREATE TABLE public.users (
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     "lastLoginAt" date
 );
-ALTER TABLE ONLY public.categories
-    ADD CONSTRAINT pk_categories PRIMARY KEY (category_id);
-ALTER TABLE ONLY public.customer_customer_demo
-    ADD CONSTRAINT pk_customer_customer_demo PRIMARY KEY (customer_id, customer_type_id);
-ALTER TABLE ONLY public.customer_demographics
-    ADD CONSTRAINT pk_customer_demographics PRIMARY KEY (customer_type_id);
-ALTER TABLE ONLY public.customers
-    ADD CONSTRAINT pk_customers PRIMARY KEY (customer_id);
-ALTER TABLE ONLY public.employee_territories
-    ADD CONSTRAINT pk_employee_territories PRIMARY KEY (employee_id, territory_id);
-ALTER TABLE ONLY public.employees
-    ADD CONSTRAINT pk_employees PRIMARY KEY (employee_id);
-ALTER TABLE ONLY public.order_details
-    ADD CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id);
-ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT pk_orders PRIMARY KEY (order_id);
-ALTER TABLE ONLY public.products
-    ADD CONSTRAINT pk_products PRIMARY KEY (product_id);
-ALTER TABLE ONLY public.region
-    ADD CONSTRAINT pk_region PRIMARY KEY (region_id);
-ALTER TABLE ONLY public.shippers
-    ADD CONSTRAINT pk_shippers PRIMARY KEY (shipper_id);
-ALTER TABLE ONLY public.suppliers
-    ADD CONSTRAINT pk_suppliers PRIMARY KEY (supplier_id);
-ALTER TABLE ONLY public.territories
-    ADD CONSTRAINT pk_territories PRIMARY KEY (territory_id);
-ALTER TABLE ONLY public.us_states
-    ADD CONSTRAINT pk_usstates PRIMARY KEY (state_id);
-ALTER TABLE ONLY public.roles
-    ADD CONSTRAINT roles_pkey PRIMARY KEY ("roleId");
-ALTER TABLE ONLY public.user_tokens
-    ADD CONSTRAINT user_tokens_pkey PRIMARY KEY ("userId", "refreshToken");
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_id_key UNIQUE ("userId");
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY ("userId");
-CREATE TRIGGER set_public_users_updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
-COMMENT ON TRIGGER set_public_users_updated_at ON public.users IS 'trigger to set value of column "updated_at" to current timestamp on row update';
-ALTER TABLE ONLY public.customer_customer_demo
-    ADD CONSTRAINT fk_customer_customer_demo_customer_demographics FOREIGN KEY (customer_type_id) REFERENCES public.customer_demographics(customer_type_id);
-ALTER TABLE ONLY public.customer_customer_demo
-    ADD CONSTRAINT fk_customer_customer_demo_customers FOREIGN KEY (customer_id) REFERENCES public.customers(customer_id);
-ALTER TABLE ONLY public.employee_territories
-    ADD CONSTRAINT fk_employee_territories_employees FOREIGN KEY (employee_id) REFERENCES public.employees(employee_id);
-ALTER TABLE ONLY public.employee_territories
-    ADD CONSTRAINT fk_employee_territories_territories FOREIGN KEY (territory_id) REFERENCES public.territories(territory_id);
-ALTER TABLE ONLY public.employees
-    ADD CONSTRAINT fk_employees_employees FOREIGN KEY (reports_to) REFERENCES public.employees(employee_id);
-ALTER TABLE ONLY public.order_details
-    ADD CONSTRAINT fk_order_details_orders FOREIGN KEY (order_id) REFERENCES public.orders(order_id);
-ALTER TABLE ONLY public.order_details
-    ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES public.products(product_id);
-ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES public.customers(customer_id);
-ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT fk_orders_employees FOREIGN KEY (employee_id) REFERENCES public.employees(employee_id);
-ALTER TABLE ONLY public.orders
-    ADD CONSTRAINT fk_orders_shippers FOREIGN KEY (ship_via) REFERENCES public.shippers(shipper_id);
-ALTER TABLE ONLY public.products
-    ADD CONSTRAINT fk_products_categories FOREIGN KEY (category_id) REFERENCES public.categories(category_id);
-ALTER TABLE ONLY public.products
-    ADD CONSTRAINT fk_products_suppliers FOREIGN KEY (supplier_id) REFERENCES public.suppliers(supplier_id);
-ALTER TABLE ONLY public.territories
-    ADD CONSTRAINT fk_territories_region FOREIGN KEY (region_id) REFERENCES public.region(region_id);
-ALTER TABLE ONLY public.user_tokens
-    ADD CONSTRAINT "user_tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users("userId") ON UPDATE CASCADE ON DELETE CASCADE;
-
-
 
 --
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: -
@@ -3667,4 +3599,72 @@ INSERT INTO us_states VALUES (48, 'Washington', 'WA', 'west');
 INSERT INTO us_states VALUES (49, 'West Virginia', 'WV', 'south');
 INSERT INTO us_states VALUES (50, 'Wisconsin', 'WI', 'midwest');
 INSERT INTO us_states VALUES (51, 'Wyoming', 'WY', 'west');
+
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT pk_categories PRIMARY KEY (category_id);
+ALTER TABLE ONLY public.customer_customer_demo
+    ADD CONSTRAINT pk_customer_customer_demo PRIMARY KEY (customer_id, customer_type_id);
+ALTER TABLE ONLY public.customer_demographics
+    ADD CONSTRAINT pk_customer_demographics PRIMARY KEY (customer_type_id);
+ALTER TABLE ONLY public.customers
+    ADD CONSTRAINT pk_customers PRIMARY KEY (customer_id);
+ALTER TABLE ONLY public.employee_territories
+    ADD CONSTRAINT pk_employee_territories PRIMARY KEY (employee_id, territory_id);
+ALTER TABLE ONLY public.employees
+    ADD CONSTRAINT pk_employees PRIMARY KEY (employee_id);
+ALTER TABLE ONLY public.order_details
+    ADD CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id);
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT pk_orders PRIMARY KEY (order_id);
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT pk_products PRIMARY KEY (product_id);
+ALTER TABLE ONLY public.region
+    ADD CONSTRAINT pk_region PRIMARY KEY (region_id);
+ALTER TABLE ONLY public.shippers
+    ADD CONSTRAINT pk_shippers PRIMARY KEY (shipper_id);
+ALTER TABLE ONLY public.suppliers
+    ADD CONSTRAINT pk_suppliers PRIMARY KEY (supplier_id);
+ALTER TABLE ONLY public.territories
+    ADD CONSTRAINT pk_territories PRIMARY KEY (territory_id);
+ALTER TABLE ONLY public.us_states
+    ADD CONSTRAINT pk_usstates PRIMARY KEY (state_id);
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_pkey PRIMARY KEY ("roleId");
+ALTER TABLE ONLY public.user_tokens
+    ADD CONSTRAINT user_tokens_pkey PRIMARY KEY ("userId", "refreshToken");
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_id_key UNIQUE ("userId");
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY ("userId");
+CREATE TRIGGER set_public_users_updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
+COMMENT ON TRIGGER set_public_users_updated_at ON public.users IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+ALTER TABLE ONLY public.customer_customer_demo
+    ADD CONSTRAINT fk_customer_customer_demo_customer_demographics FOREIGN KEY (customer_type_id) REFERENCES public.customer_demographics(customer_type_id);
+ALTER TABLE ONLY public.customer_customer_demo
+    ADD CONSTRAINT fk_customer_customer_demo_customers FOREIGN KEY (customer_id) REFERENCES public.customers(customer_id);
+ALTER TABLE ONLY public.employee_territories
+    ADD CONSTRAINT fk_employee_territories_employees FOREIGN KEY (employee_id) REFERENCES public.employees(employee_id);
+ALTER TABLE ONLY public.employee_territories
+    ADD CONSTRAINT fk_employee_territories_territories FOREIGN KEY (territory_id) REFERENCES public.territories(territory_id);
+ALTER TABLE ONLY public.employees
+    ADD CONSTRAINT fk_employees_employees FOREIGN KEY (reports_to) REFERENCES public.employees(employee_id);
+ALTER TABLE ONLY public.order_details
+    ADD CONSTRAINT fk_order_details_orders FOREIGN KEY (order_id) REFERENCES public.orders(order_id);
+ALTER TABLE ONLY public.order_details
+    ADD CONSTRAINT fk_order_details_products FOREIGN KEY (product_id) REFERENCES public.products(product_id);
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES public.customers(customer_id);
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT fk_orders_employees FOREIGN KEY (employee_id) REFERENCES public.employees(employee_id);
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT fk_orders_shippers FOREIGN KEY (ship_via) REFERENCES public.shippers(shipper_id);
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT fk_products_categories FOREIGN KEY (category_id) REFERENCES public.categories(category_id);
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT fk_products_suppliers FOREIGN KEY (supplier_id) REFERENCES public.suppliers(supplier_id);
+ALTER TABLE ONLY public.territories
+    ADD CONSTRAINT fk_territories_region FOREIGN KEY (region_id) REFERENCES public.region(region_id);
+ALTER TABLE ONLY public.user_tokens
+    ADD CONSTRAINT "user_tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users("userId") ON UPDATE CASCADE ON DELETE CASCADE;
 
