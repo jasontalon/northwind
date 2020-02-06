@@ -6,9 +6,9 @@ import * as moment from 'moment';
 @Injectable()
 export class UsersService {
   constructor(private readonly hasuraService: HasuraService) {}
-  async find(userid: string): Promise<IUser> {
+  async find(userId: string): Promise<IUser> {
     const { users } = await this.hasuraService.query(
-      `{ users(where: {userid: {_eq: "${userid}"}}) { userid passwordSalt passwordHash refreshToken role lastLoginAt createdAt } }`,
+      `{ users(where: {userId: {_eq: "${userId}"}}) { userId passwordSalt passwordHash role lastLoginAt created_at } }`,
     );
 
     if (users?.length ?? 0 > 0) return <IUser>users[0];
@@ -16,7 +16,7 @@ export class UsersService {
   }
   async findAll(): Promise<IUser[]> {
     const { users } = await this.hasuraService.query(
-      `query { users { userid passwordSalt passwordHash refreshToken role lastLoginAt createdAt } }`,
+      `query { users { userId passwordSalt passwordHash role lastLoginAt created_at } }`,
     );
 
     return users;
@@ -30,11 +30,23 @@ export class UsersService {
     await this.hasuraService.query(query, variables);
   }
 
-  async updateSignIn(userid: string, refreshToken: string) {
-    const query = `mutation { update_users(where: {userid: {_eq: "${userid}"}}, _set: {refreshToken: "${refreshToken}", lastLoginAt: "${moment
-      .utc()
-      .format()}"}) { affected_rows } }`;
+  async updateSignIn(userId: string, refreshToken: string) {
+    const query = `mutation insert_user_tokens($user: user_tokens_insert_input!) {
+      insert_user_tokens(objects: [$user]) {
+        affected_rows
+      }
+    }
+    `;
 
-    await this.hasuraService.query(query);
+    await this.hasuraService.query(query, {
+      user: {
+        userId,
+        refreshToken,
+        expiresAt: moment
+          .utc()
+          .add(1, 'month')
+          .format(),
+      },
+    });
   }
 }

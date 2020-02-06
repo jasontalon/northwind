@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
+const shortid = require('shortid');
 
 @Controller('auth')
 export class AuthController {
@@ -16,11 +17,18 @@ export class AuthController {
 
   @Post('signup')
   async signUp(
-    @Body('username') userid: string,
+    @Body('username') userId: string,
     @Body('password') password: string,
   ) {
-    await this.authService.signup(userid, password);
-    return await this.authService.login({ userid });
+    await this.authService.signup(userId, password, 'user');
+    return await this.authService.login({ userId });
+  }
+
+  @Post('signInAsGuest')
+  async signInAsGuest() {
+    const userId = `guest-${shortid.generate()}`;
+    await this.authService.signup(userId, '', 'guest');
+    return await this.authService.login({ userId });
   }
 
   @UseGuards(AuthGuard('local'))
@@ -40,7 +48,7 @@ export class AuthController {
   @Get('hasura')
   async validateHasura(@Request() req) {
     const hasuraVariables = {
-      'X-Hasura-User-Id': req.user.userid,
+      'X-Hasura-User-Id': req.user.userId,
       'X-Hasura-Role': req.user.role,
     };
     return hasuraVariables;
