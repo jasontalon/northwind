@@ -30,7 +30,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/auth.js', '~/plugins/axios.js'],
+  plugins: ['~/plugins/axios.client.js', '~/plugins/auth.client.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -43,7 +43,6 @@ export default {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     'cookie-universal-nuxt'
@@ -53,7 +52,9 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true
+    proxy: true,
+    debug: true,
+    retry: true
   },
 
   proxy: {

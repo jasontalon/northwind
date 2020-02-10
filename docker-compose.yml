@@ -12,7 +12,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: password
       PGADMIN_LISTEN_PORT: 5050
   postgres:
-    image: postgres
+    image: postgres:12-alpine
     restart: always
     volumes:
     - db_data:/var/lib/postgresql/data
@@ -31,12 +31,12 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" 
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log      
       HASURA_GRAPHQL_ADMIN_SECRET: password
-      HASURA_GRAPHQL_AUTH_HOOK : http://api:3000/auth/hasura
+      HASURA_GRAPHQL_AUTH_HOOK : http://api:3005/auth/hasura
       HASURA_GRAPHQL_AUTH_HOOK_MODE : GET
   api:
     build: ./api
     ports:
-    - "5434:3000"
+    - "5434:3005"
     - "5439:9229" #debugging
     volumes:
     - ./api/dist:/api/dist

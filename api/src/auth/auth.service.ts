@@ -48,4 +48,16 @@ export class AuthService {
       refresh_token,
     };
   }
+
+  async refreshToken(refreshToken: string) {
+    const {
+      userId,
+      role,
+      name,
+    }: IUser = await this.usersService.getUserByRefreshToken(refreshToken);
+
+    return {
+      access_token: this.jwtService.sign({ sub: userId, role, name }),
+    };
+  }
 }

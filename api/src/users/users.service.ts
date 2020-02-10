@@ -49,4 +49,16 @@ export class UsersService {
       },
     });
   }
+
+  async getUserByRefreshToken(refreshToken: string) {
+    const query = `query  {
+      users(where: {user_tokens: {refreshToken: {_eq: "${refreshToken}"}}}) {
+        userId passwordSalt passwordHash role lastLoginAt created_at 
+      }
+    }`;
+
+    const { users } = await this.hasuraService.query(query);
+    if (users?.length ?? 0 > 0) return <IUser>users[0];
+    return null;
+  }
 }
