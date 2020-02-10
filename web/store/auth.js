@@ -1,46 +1,38 @@
 export const state = () => {
-  return {
-    accessToken: ''
-  };
+  return {};
 };
 
-export const mutations = {
-  setAccessToken(state, val) {
-    console.log({ state, val });
-    state.accessToken = val;
-  }
-};
-
-const loginAsGuest = async () => {
-  const { access_token } = await this.$axios.$post('/api/auth/signInAsGuest');
+const loginAsGuest = async axios => {
+  const { access_token } = await axios.$post('/api/auth/signInAsGuest');
   return access_token;
 };
+
+const setCookieToken = (cookies, access_token) => {
+  cookies.set('access_token', access_token, {
+    maxAge: 3600
+  });
+};
+
 export const actions = {
   async checkAuth(store) {
     const {
       app: { $cookies }
     } = this;
-    let access_token = $cookies.get('access_token');
-
-    if (access_token) {
+    if ($cookies.get('access_token')) {
       try {
         await this.$axios.$get('/api/auth/profile');
       } catch (err) {
-        access_token = await loginAsGuest();
+        setCookieToken($cookies, await loginAsGuest(this.$axios));
       }
     } else {
-      let refreshToken;
       try {
-        refreshToken = await this.$axios.$post('/api/auth/refreshToken');
-      } catch (err) {}
-
-      access_token = !!refreshToken
-        ? refreshToken.access_token
-        : await loginAsGuest();
+        setCookieToken(
+          $cookies,
+          (await this.$axios.$post('/api/auth/refreshToken')).access_token
+        );
+      } catch (err) {
+        setCookieToken($cookies, await loginAsGuest(this.$axios));
+      }
     }
-
-    $cookies.set('access_token', access_token, {
-      maxAge: 3600
-    });
   }
 };

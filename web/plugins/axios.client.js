@@ -11,6 +11,7 @@ export default function({ $axios, redirect, store, app }) {
       return response;
     },
     async error => {
+      console.log(error.response);
       if (error.response.config.url.toLowerCase() == '/api/auth/refreshtoken')
         return;
       try {
