@@ -30,10 +30,9 @@ const setCookieToken = (cookies, access_token) => {
 
 export const actions = {
   async refreshToken(store) {
-    setCookieToken(
-      this.app.$cookies,
-      (await this.$axios.$post('/api/auth/refreshToken')).access_token
-    );
+    const response = await this.$axios.$post('/api/auth/refreshToken');
+    if (response)
+      setCookieToken(this.app.$cookies, response.access_token ?? '');
   },
 
   async signInAsGuest() {
@@ -42,7 +41,7 @@ export const actions = {
 
   async validateUser({ commit }) {
     const user = await this.$axios.$get('/api/auth/profile');
-    commit('setUser', user);
+    if (user) commit('setUser', user);
   },
 
   async checkAuth({ dispatch }) {

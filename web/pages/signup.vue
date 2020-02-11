@@ -66,7 +66,8 @@ export default {
         password: this.password
       });
       await this.$store.dispatch('auth/validateUser');
-      this.$router.push("/");
+
+      if (this.feedback.length == 0) this.$router.push('/');
     }
   }
 };

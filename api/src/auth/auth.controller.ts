@@ -101,7 +101,7 @@ export class AuthController {
       .status(200)
       .cookie('refresh_token', refresh_token, {
         httpOnly: true,
-        maxAge: 20000,
+        maxAge: 86400000, //1 day
       })
       .jsonp({ access_token });
   }

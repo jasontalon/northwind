@@ -3,10 +3,14 @@
     <b-button @click="this.clickHandler">click me</b-button>
     <b-button @click="this.validateToken">validate token</b-button>
     <b-button @click="this.refreshToken">refresh token</b-button>
+    <div>{{ this.user }}</div>
   </div>
 </template>
 <script>
 export default {
+  data() {
+    return { user: {} };
+  },
   methods: {
     async clickHandler() {
       console.log('clicking..');
@@ -14,9 +18,9 @@ export default {
       console.log(data);
     },
     async validateToken() {
-      await this.$axios.get('/api/auth/profile');
+      this.user = await this.$axios.$get('/api/auth/profile');
     },
-    async refreshToken(){
+    async refreshToken() {
       await this.$axios.post('/api/auth/refreshToken');
     }
   }

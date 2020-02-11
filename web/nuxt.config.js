@@ -2,7 +2,7 @@ export default {
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000'
   },
-  mode: 'universal',
+  mode: 'spa',
   /*
    ** Headers of the page
    */
