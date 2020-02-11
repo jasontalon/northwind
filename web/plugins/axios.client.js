@@ -5,21 +5,19 @@ export default function({ $axios, redirect, store, app }) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
   });
-
   $axios.interceptors.response.use(
     response => {
       return response;
     },
     async error => {
-      if (error.response.config.url.toLowerCase() == '/api/auth/refreshtoken')
-        return;
-      try {
-        app.$cookies.set(
-          'access_token',
-          (await $axios.$post('/api/auth/refreshToken')).access_token,
-          { maxAge: 3600 }
-        );
-      } catch (err) {}
+      if (error.response.status != 401) throw error;
+
+      if (error.response.config.url.toLowerCase() == '/api/auth/refreshtoken') {
+        await store.dispatch('auth/signInAsGuest');
+        await store.dispatch('auth/validateUser');
+      } else {
+        await store.dispatch('auth/refreshToken');
+      }
     }
   );
 }

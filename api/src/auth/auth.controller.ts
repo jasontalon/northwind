@@ -11,21 +11,29 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
-import { CLIENT_RENEG_WINDOW } from 'tls';
-import { CompressionTypes } from '@nestjs/common/interfaces/external/kafka-options.interface';
+import { UsersService } from 'src/users/users.service';
 const shortid = require('shortid');
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('signup')
   async signUp(
     @Body('username') userId: string,
     @Body('password') password: string,
+    @Res() res: Response,
   ) {
+    const user = await this.usersService.find(userId);
+    if (user) {
+      res.status(400).send('User already exists.');
+      return;
+    }
     await this.authService.signup(userId, password, 'user');
-    return await this.authService.login({ userId });
+    this._signIn(userId, res);
   }
 
   @Post('signInAsGuest')
@@ -33,23 +41,13 @@ export class AuthController {
   async signInAsGuest(@Res() res: Response) {
     const userId = `guest-${shortid.generate()}`;
     await this.authService.signup(userId, '', 'guest');
-    const { access_token, refresh_token } = await this.authService.login({
-      userId,
-    });
-    
-    res
-      .status(200)
-      .cookie('refresh_token', refresh_token, {
-        httpOnly: true,
-        maxAge: 2 * 3600 * 1000,
-      })
-      .jsonp({ access_token });
+    await this._signIn(userId, res);
   }
 
   @UseGuards(AuthGuard('local'))
   @Post('signin')
-  async signin(@Req() req) {
-    return await this.authService.login(req.user);
+  async signin(@Req() req, @Res() res: Response) {
+    await this._signIn(req.user.userId, res);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -73,7 +71,7 @@ export class AuthController {
   async refreshToken(@Req() req: Request, @Res() res: Response) {
     try {
       const errMessage = 'no refresh_token available';
-      
+
       if (!req.headers.cookie) throw new Error(errMessage);
 
       const cookies = new URLSearchParams(
@@ -81,14 +79,30 @@ export class AuthController {
       );
 
       const refreshToken = cookies.get('refresh_token');
-      
+
       if (!refreshToken) throw new Error(errMessage);
 
-      const newToken = await this.authService.refreshToken(refreshToken);
+      const { access_token } = await this.authService.refreshToken(
+        refreshToken,
+      );
 
-      res.status(200).jsonp(newToken);
+      res.status(200).jsonp({ access_token });
     } catch (error) {
       res.status(401).send('Unauthorized.');
     }
+  }
+
+  async _signIn(userId: string, response: Response) {
+    const { access_token, refresh_token } = await this.authService.login({
+      userId,
+    });
+
+    response
+      .status(200)
+      .cookie('refresh_token', refresh_token, {
+        httpOnly: true,
+        maxAge: 20000,
+      })
+      .jsonp({ access_token });
   }
 }
