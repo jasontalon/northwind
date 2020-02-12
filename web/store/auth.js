@@ -3,7 +3,8 @@ export const state = () => {
     userId: '',
     role: '',
     signUpFeedback: '',
-    signInFeedback: ''
+    signInFeedback: '',
+    accessToken: ''
   };
 };
 
@@ -17,29 +18,31 @@ export const mutations = {
   },
   setSignInFeedback(state, feedback) {
     state.signInFeedback = feedback;
+  },
+  setAccessToken(state, accessToken) {
+    state.accessToken = accessToken;
   }
 };
 
-const signInAsGuest = async axios => {
+const _signInAsGuest = async axios => {
   const { access_token } = await axios.$post('/api/auth/signInAsGuest');
   return access_token;
 };
 
-const setCookieToken = (cookies, access_token) => {
-  cookies.set('access_token', access_token, {
-    maxAge: 3600 //1 hour
-  });
-};
-
 export const actions = {
-  async refreshToken() {
+  setCookieToken({ commit }, access_token) {
+    commit('setAccessToken', access_token);
+    this.app.$cookies.set('access_token', access_token, {
+      maxAge: 3600 //1 hour
+    });
+  },
+  async refreshToken({ dispatch }) {
     const response = await this.$axios.$post('/api/auth/token/refresh');
-    if (response)
-      setCookieToken(this.app.$cookies, response.access_token ?? '');
+    if (response) dispatch('setCookieToken', response.access_token ?? '');
   },
 
-  async signInAsGuest() {
-    setCookieToken(this.app.$cookies, await signInAsGuest(this.$axios));
+  async signInAsGuest({ dispatch }) {
+    dispatch('setCookieToken', await _signInAsGuest(this.$axios));
   },
 
   async validateUser({ commit }) {
@@ -56,34 +59,34 @@ export const actions = {
     }
   },
 
-  async signIn(store, { username, password }) {
+  async signIn({ commit, dispatch }, { username, password }) {
     try {
       const { access_token } = await this.$axios.$post('/api/auth/signIn', {
         username,
         password
       });
 
-      setCookieToken(this.app.$cookies, access_token);
-      store.commit('setSignInFeedback', '');
+      dispatch('setCookieToken', access_token);
+      commit('setSignInFeedback', '');
     } catch ({ response }) {
       const { data } = response;
-      store.commit('setSignInFeedback', data);
+      commit('setSignInFeedback', data);
     }
   },
 
-  async signUp(store, { username, password }) {
+  async signUp({ commit, dispatch }, { username, password }) {
     try {
       const { access_token } = await this.$axios.$post('/api/auth/signUp', {
         username,
         password
       });
-      setCookieToken(this.app.$cookies, access_token);
-      store.commit('setSignUpFeedback', '');
+      dispatch('setCookieToken', access_token);
+      commit('setSignUpFeedback', '');
     } catch (error) {
       const {
         response: { data }
       } = error;
-      store.commit('setSignUpFeedback', data);
+      commit('setSignUpFeedback', data);
     }
   },
 
