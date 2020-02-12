@@ -13,15 +13,13 @@ export default {
   },
   methods: {
     async clickHandler() {
-      console.log('clicking..');
       const data = await this.$axios.$get('/api/'); //ok
-      console.log(data);
     },
     async validateToken() {
       this.user = await this.$axios.$get('/api/auth/profile');
     },
     async refreshToken() {
-      await this.$axios.post('/api/auth/refreshToken');
+      this.$store.dispatch('auth/refreshToken');
     }
   }
 };

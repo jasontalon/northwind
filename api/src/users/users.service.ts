@@ -52,7 +52,11 @@ export class UsersService {
 
   async getUserByRefreshToken(refreshToken: string) {
     const query = `query  {
-      users(where: {user_tokens: {refreshToken: {_eq: "${refreshToken}"}}}) {
+      users(where: {
+        user_tokens: 
+          {refreshToken: {_eq: "${refreshToken}"}, expiresAt: {_gt: "${moment
+      .utc()
+      .format()}"}}}) {
         userId passwordSalt passwordHash role lastLoginAt created_at 
       }
     }`;
@@ -60,5 +64,16 @@ export class UsersService {
     const { users } = await this.hasuraService.query(query);
     if (users?.length ?? 0 > 0) return <IUser>users[0];
     return null;
+  }
+
+  async expireRefreshToken(refreshToken: string) {
+    const query = `mutation {
+      update_user_tokens(where: {refreshToken: {_eq: "${refreshToken}"}}, 
+      _set: {expiresAt: "${moment.utc().format()}"}) {
+        affected_rows
+      }
+    }`;
+
+    await this.hasuraService.query(query);
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="secondary">
-      <b-navbar-brand href="#">Northwind</b-navbar-brand>
+      <b-navbar-brand to="/">Northwind</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -30,11 +30,13 @@
             <b-nav-item-dropdown right>
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
-                <em>{{userId}}</em>
+                <em>{{ userId }}</em>
               </template>
 
               <b-dropdown-item href="#">Profile</b-dropdown-item>
-              <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+              <b-dropdown-item @click="$store.dispatch('auth/signOut')"
+                >Sign Out</b-dropdown-item
+              >
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </template>
@@ -57,7 +59,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
   computed: mapState({
     userId: state => state.auth.userId,

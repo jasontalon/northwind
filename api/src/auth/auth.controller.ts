@@ -33,7 +33,7 @@ export class AuthController {
       return;
     }
     await this.authService.signup(userId, password, 'user');
-    this._signIn(userId, res);
+    await this._signIn(userId, res);
   }
 
   @Post('signInAsGuest')
@@ -44,10 +44,15 @@ export class AuthController {
     await this._signIn(userId, res);
   }
 
-  @UseGuards(AuthGuard('local'))
   @Post('signin')
-  async signin(@Req() req, @Res() res: Response) {
-    await this._signIn(req.user.userId, res);
+  async signin(
+    @Body('username') userId: string,
+    @Body('password') password: string,
+    @Res() res: Response,
+  ) {
+    const user = await this.authService.validateUser(userId, password);
+    if (!user) res.status(400).send('User does not exists');
+    else await this._signIn(userId, res);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -67,18 +72,14 @@ export class AuthController {
     return hasuraVariables;
   }
 
-  @Post('refreshToken')
+  @Post('token/refresh')
   async refreshToken(@Req() req: Request, @Res() res: Response) {
     try {
       const errMessage = 'no refresh_token available';
 
       if (!req.headers.cookie) throw new Error(errMessage);
 
-      const cookies = new URLSearchParams(
-        req.headers.cookie.replace(/;/g, '&'),
-      );
-
-      const refreshToken = cookies.get('refresh_token');
+      const refreshToken = this._getRefreshTokenCookie(req);
 
       if (!refreshToken) throw new Error(errMessage);
 
@@ -92,6 +93,31 @@ export class AuthController {
     }
   }
 
+  @Post('token/expire')
+  async signOut(@Req() req: Request, @Res() res: Response) {
+    const refreshToken = this._getRefreshTokenCookie(req);
+    if (refreshToken) await this.usersService.expireRefreshToken(refreshToken);
+    res
+      .clearCookie('refresh_token', this._getRefreshTokenOptions())
+      .status(200)
+      .send('OK');
+  }
+
+  _getRefreshTokenCookie(req: Request) {
+    const cookies = new URLSearchParams(req.headers.cookie.replace(/;/g, '&'));
+
+    const refreshToken = cookies.get('refresh_token');
+    return refreshToken;
+  }
+
+  _getRefreshTokenOptions() {
+    return {
+      path: '/api/auth/token',
+      httpOnly: true,
+      maxAge: 86400000, //1 day
+    };
+  }
+
   async _signIn(userId: string, response: Response) {
     const { access_token, refresh_token } = await this.authService.login({
       userId,
@@ -99,10 +125,7 @@ export class AuthController {
 
     response
       .status(200)
-      .cookie('refresh_token', refresh_token, {
-        httpOnly: true,
-        maxAge: 86400000, //1 day
-      })
+      .cookie('refresh_token', refresh_token, this._getRefreshTokenOptions())
       .jsonp({ access_token });
   }
 }

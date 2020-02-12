@@ -6,11 +6,13 @@
     >
     </sign-in>
     <b-button block @click="this.signIn">Sign In</b-button>
+    {{ feedback }}
   </div>
 </template>
 
 <script>
 import SignIn from '~/components/SignIn';
+import { mapState } from 'vuex';
 export default {
   components: { SignIn },
   data() {
@@ -19,13 +21,17 @@ export default {
       password: ''
     };
   },
+  computed: {
+    ...mapState({ feedback: state => state.auth.signInFeedback })
+  },
   methods: {
     async signIn() {
-      console.log(this.username, this.password);
       await this.$store.dispatch('auth/signIn', {
-        userId: this.username,
+        username: this.username,
         password: this.password
       });
+      await this.$store.dispatch('auth/validateUser');
+      if (this.feedback.length == 0) this.$router.push('/');
     }
   }
 };

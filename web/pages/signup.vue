@@ -52,7 +52,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({ feedback: state => state.auth.feedback }),
+    ...mapState({ feedback: state => state.auth.signUpFeedback }),
     confirmPasswordFeedback() {
       if (this.confirmPassword.length == 0) return 'Please confirm password.';
       if (this.confirmPassword != this.password) return 'Password not the same';

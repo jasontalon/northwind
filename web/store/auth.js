@@ -2,7 +2,8 @@ export const state = () => {
   return {
     userId: '',
     role: '',
-    feedback: ''
+    signUpFeedback: '',
+    signInFeedback: ''
   };
 };
 
@@ -10,10 +11,12 @@ export const mutations = {
   setUser(state, { userId, role }) {
     state.userId = userId;
     state.role = role;
-    console.log({ userId, role });
   },
-  setFeedback(state, feedback) {
-    state.feedback = feedback;
+  setSignUpFeedback(state, feedback) {
+    state.signUpFeedback = feedback;
+  },
+  setSignInFeedback(state, feedback) {
+    state.signInFeedback = feedback;
   }
 };
 
@@ -24,13 +27,13 @@ const signInAsGuest = async axios => {
 
 const setCookieToken = (cookies, access_token) => {
   cookies.set('access_token', access_token, {
-    maxAge: 3600
+    maxAge: 3600 //1 hour
   });
 };
 
 export const actions = {
-  async refreshToken(store) {
-    const response = await this.$axios.$post('/api/auth/refreshToken');
+  async refreshToken() {
+    const response = await this.$axios.$post('/api/auth/token/refresh');
     if (response)
       setCookieToken(this.app.$cookies, response.access_token ?? '');
   },
@@ -45,25 +48,27 @@ export const actions = {
   },
 
   async checkAuth({ dispatch }) {
-    if (this.app.$cookies.get('access_token')) {
-      try {
-        await dispatch('validateUser');
-        return;
-      } catch (err) {
-        await dispatch('signInAsGuest');
-      }
-    } else {
-      try {
+    try {
+      if (!this.app.$cookies.get('access_token'))
         await dispatch('refreshToken');
-      } catch (err) {
-        await dispatch('signInAsGuest');
-      }
+    } catch (error) {
+      await dispatch('signInAsGuest');
     }
-    await dispatch('validateUser');
   },
 
-  async signIn(store, { userId, password }) {
-    await this.$axios.$post('/api/auth/signIn', { userId, password });
+  async signIn(store, { username, password }) {
+    try {
+      const { access_token } = await this.$axios.$post('/api/auth/signIn', {
+        username,
+        password
+      });
+
+      setCookieToken(this.app.$cookies, access_token);
+      store.commit('setSignInFeedback', '');
+    } catch ({ response }) {
+      const { data } = response;
+      store.commit('setSignInFeedback', data);
+    }
   },
 
   async signUp(store, { username, password }) {
@@ -73,12 +78,18 @@ export const actions = {
         password
       });
       setCookieToken(this.app.$cookies, access_token);
-      store.commit('setFeedback', '');
+      store.commit('setSignUpFeedback', '');
     } catch (error) {
       const {
         response: { data }
       } = error;
-      store.commit('setFeedback', data);
+      store.commit('setSignUpFeedback', data);
     }
+  },
+
+  async signOut({ dispatch }) {
+    await this.$axios.$post('/api/auth/token/expire');
+    this.app.$cookies.removeAll();
+    await dispatch('checkAuth');
   }
 };
