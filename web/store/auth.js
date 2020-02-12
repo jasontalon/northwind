@@ -60,6 +60,7 @@ export const actions = {
   },
 
   async signIn({ commit, dispatch }, { username, password }) {
+    commit('setSignInFeedback', '');
     try {
       const { access_token } = await this.$axios.$post('/api/auth/signIn', {
         username,
@@ -67,7 +68,6 @@ export const actions = {
       });
 
       dispatch('setCookieToken', access_token);
-      commit('setSignInFeedback', '');
     } catch ({ response }) {
       const { data } = response;
       commit('setSignInFeedback', data);
@@ -75,13 +75,13 @@ export const actions = {
   },
 
   async signUp({ commit, dispatch }, { username, password }) {
+    commit('setSignUpFeedback', '');
     try {
       const { access_token } = await this.$axios.$post('/api/auth/signUp', {
         username,
         password
       });
       dispatch('setCookieToken', access_token);
-      commit('setSignUpFeedback', '');
     } catch (error) {
       const {
         response: { data }
