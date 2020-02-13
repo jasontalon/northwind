@@ -1,13 +1,24 @@
 export default function({ $axios, redirect, store, app }) {
   $axios.onRequest(config => {
     const accessToken = app.$cookies.get('access_token');
+    console.log('hahah', config);
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
   });
   $axios.interceptors.response.use(
-    response => {
-      return response;
+    async response => {
+      const {
+          data: { errors = [] },
+          config: { url }
+        } = response,
+        [error = {}] = errors,
+        { extensions: { code = '' } = {} } = error;
+      console.log(code, url);
+      if (code.toLowerCase() == 'access-denied' && url == '/gql') {
+        await store.dispatch('auth/refreshToken');
+        await $axios.request(response.config);
+      } else return response;
     },
     async error => {
       if (error.response.status != 401) throw error;

@@ -3,6 +3,24 @@
     <div>
       <b-form-group
         description=""
+        label="Employee #"
+        label-for="txtEmployeeId"
+        :invalid-feedback="this.fbEmployeeId"
+        :state="this.fbEmployeeId.length == 0"
+      >
+        <b-form-input
+          type="number"
+          id="txtEmployeeId"
+          v-model="employee_id"
+          :state="this.fbEmployeeId.length == 0"
+          trim
+        ></b-form-input>
+      </b-form-group>
+    </div>
+
+    <div>
+      <b-form-group
+        description=""
         label="First name"
         label-for="txtFirstName"
         :invalid-feedback="this.fbFirstName"
@@ -10,7 +28,7 @@
       >
         <b-form-input
           id="txtFirstName"
-          v-model="firstName"
+          v-model="first_name"
           :state="this.fbFirstName.length == 0"
           trim
         ></b-form-input>
@@ -27,7 +45,7 @@
       >
         <b-form-input
           id="txtLastName"
-          v-model="lastName"
+          v-model="last_name"
           :state="this.fbLastName.length == 0"
           trim
         ></b-form-input>
@@ -44,7 +62,7 @@
       >
         <b-form-input
           id="txtJobTitle"
-          v-model="jobTitle"
+          v-model="title"
           :state="this.fbJobTitle.length == 0"
           trim
         ></b-form-input>
@@ -60,7 +78,7 @@
       >
         <b-form-input
           id="txtSalutations"
-          v-model="salutations"
+          v-model="title_of_courtesy"
           :state="this.fbSalutations.length == 0"
           trim
         ></b-form-input>
@@ -77,7 +95,7 @@
       >
         <b-form-input
           id="txtBirthDate"
-          v-model="birthDate"
+          v-model="birth_date"
           :state="this.fbBirthDate.length == 0"
           trim
         ></b-form-input>
@@ -93,7 +111,7 @@
       >
         <b-form-input
           id="txtHireDate"
-          v-model="hireDate"
+          v-model="hire_date"
           :state="this.fbHireDate.length == 0"
           trim
         ></b-form-input>
@@ -103,9 +121,9 @@
       :p-address.sync="address"
       :p-city.sync="city"
       :p-region.sync="region"
-      :p-postal-code.sync="postalCode"
+      :p-postal-code.sync="postal_code"
       :p-country.sync="country"
-      :p-phone.sync="phone"
+      :p-phone.sync="home_phone"
     ></contact-detail>
 
     <div>
@@ -134,7 +152,8 @@
       >
         <b-form-input
           id="txtReportsTo"
-          v-model="reportsTo"
+          type="number"
+          v-model="reports_to"
           :state="this.fbReportsTo.length == 0"
           trim
         ></b-form-input>
@@ -150,23 +169,28 @@ export default {
   components: { ContactDetail },
   data() {
     return {
-      firstName: '',
-      lastName: '',
-      jobTitle: '',
-      salutations: '',
-      birthDate: '',
-      hireDate: '',
+      hire_date: '',
+      reports_to: '',
+      birth_date: '',
+      employee_id: '',
       address: '',
       city: '',
       region: '',
-      postalCode: '',
+      postal_code: '',
       country: '',
-      phone: '',
+      home_phone: '',
+      extension: '',
       notes: '',
-      reportsTo: ''
+      last_name: '',
+      first_name: '',
+      title: '',
+      title_of_courtesy: ''
     };
   },
   computed: {
+    fbEmployeeId() {
+      return '';
+    },
     fbFirstName() {
       return '';
     },

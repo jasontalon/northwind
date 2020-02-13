@@ -74,23 +74,13 @@ export class AuthController {
 
   @Post('token/refresh')
   async refreshToken(@Req() req: Request, @Res() res: Response) {
-    try {
-      const errMessage = 'no refresh_token available';
+    const refreshToken = !!req.headers.cookie
+      ? this._getRefreshTokenCookie(req)
+      : '';
 
-      if (!req.headers.cookie) throw new Error(errMessage);
-
-      const refreshToken = this._getRefreshTokenCookie(req);
-
-      if (!refreshToken) throw new Error(errMessage);
-
-      const { access_token } = await this.authService.refreshToken(
-        refreshToken,
-      );
-
-      res.status(200).jsonp({ access_token });
-    } catch (error) {
-      res.status(401).send('Unauthorized.');
-    }
+    const token = await this.authService.refreshToken(refreshToken);
+    if (token) res.status(200).jsonp(token);
+    else res.status(401).send('Unauthorized.');
   }
 
   @Post('token/expire')

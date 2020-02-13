@@ -7,7 +7,10 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item to="/employees">Employees</b-nav-item>
+          <b-nav-item-dropdown text="Employees" right>
+            <b-dropdown-item to="/employees">View All</b-dropdown-item>
+            <b-dropdown-item to="/employees/create">Create</b-dropdown-item>
+          </b-nav-item-dropdown>
           <b-nav-item to="/customers">Customers</b-nav-item>
           <b-nav-item to="/orders">Orders</b-nav-item>
         </b-navbar-nav>

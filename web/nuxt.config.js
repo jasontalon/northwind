@@ -54,7 +54,7 @@ export default {
   axios: {
     proxy: true,
     debug: true,
-    retry: true
+    retry: { retries: 2 }
   },
 
   proxy: {
