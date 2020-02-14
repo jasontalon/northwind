@@ -24,7 +24,7 @@ export default {
     type: { type: String, default: '' },
     label: { type: String, default: '' },
     required: { type: Boolean, default: false },
-    value: { type: String},
+    value: { type: String },
     readonly: { type: Boolean, default: false },
     description: { type: String, default: '' }
   },
@@ -40,6 +40,8 @@ export default {
       let feedback = '';
       if (!this.required || this.readonly) feedback = '';
       else if (this.value.length == 0) feedback = `${this.label} is required.`;
+      //make regex validations
+      //other type support
       this.$emit('update:feedback', feedback);
       return feedback;
     }

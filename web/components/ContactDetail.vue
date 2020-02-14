@@ -39,7 +39,6 @@
     </div>
     <div>
       <country-select
-        :id="this.$shortid()"
         v-model="dtCountry"
         required
         @input="value => $emit('update:country', value)"
@@ -74,18 +73,17 @@ export default {
     country: { type: String, default: '' },
     phone: { type: String, default: '' },
     fax: { type: String, default: '' },
-
     hasFax: { type: Boolean, default: false }
   },
   data() {
     return {
       dtAddress: this.address,
-      dtCity: this.address,
-      dtRegion: this.address,
+      dtCity: this.city,
+      dtRegion: this.region,
       dtPostalCode: this.postalCode,
-      dtCountry: this.address,
-      dtPhone: this.address,
-      dtFax: this.address,
+      dtCountry: this.country,
+      dtPhone: this.phone,
+      dtFax: this.fax,
       feedback: {
         address: ''
       }

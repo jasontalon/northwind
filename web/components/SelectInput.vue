@@ -40,14 +40,12 @@ export default {
   },
   computed: {
     feedback() {
-      console.log(this.value);
       let feedback = '';
       if (!this.required || this.readonly) feedback = '';
       else if (this.value.length == 0) feedback = `${this.label} is required.`;
       else if (!this.selections.includes(this.value))
         feedback = `Invalid ${this.label}.`;
       this.$emit('update:feedback', feedback);
-      console.log(feedback);
       return feedback;
     }
   }

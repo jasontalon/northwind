@@ -1,113 +1,63 @@
 <template>
   <div>
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Employee #"
-        label-for="txtEmployeeId"
-        :invalid-feedback="this.fbEmployeeId"
-        :state="this.fbEmployeeId.length == 0"
-      >
-        <b-form-input
-          type="number"
-          id="txtEmployeeId"
-          v-model="employee_id"
-          :state="this.fbEmployeeId.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="employee_id"
+      ></text-input>
+    </div>
+    <div>
+      <text-input
+        label="First Name"
+        required
+        type="text"
+        v-model="first_name"
+      ></text-input>
     </div>
 
     <div>
-      <b-form-group
-        description=""
-        label="First name"
-        label-for="txtFirstName"
-        :invalid-feedback="this.fbFirstName"
-        :state="this.fbFirstName.length == 0"
-      >
-        <b-form-input
-          id="txtFirstName"
-          v-model="first_name"
-          :state="this.fbFirstName.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+      <text-input
+        label="Last Name"
+        required
+        type="text"
+        v-model="last_name"
+      ></text-input>
     </div>
 
     <div>
-      <b-form-group
-        description=""
-        label="Last name"
-        label-for="txtLastName"
-        :invalid-feedback="this.fbLastName"
-        :state="this.fbLastName.length == 0"
-      >
-        <b-form-input
-          id="txtLastName"
-          v-model="last_name"
-          :state="this.fbLastName.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
-    </div>
-
-    <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Job Title"
-        label-for="txtJobTitle"
-        :invalid-feedback="this.fbJobTitle"
-        :state="this.fbJobTitle.length == 0"
-      >
-        <b-form-input
-          id="txtJobTitle"
-          v-model="title"
-          :state="this.fbJobTitle.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="title"
+      ></text-input>
     </div>
     <div>
       <select-input
         label="Salutations"
         :selections="['Mr.', 'Ms.', 'Mrs.']"
         v-model="title_of_courtesy"
-        required
+        
       ></select-input>
     </div>
 
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Birth Date"
-        label-for="txtBirthDate"
-        :invalid-feedback="this.fbBirthDate"
-        :state="this.fbBirthDate.length == 0"
-      >
-        <b-form-input
-          id="txtBirthDate"
-          v-model="birth_date"
-          :state="this.fbBirthDate.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="birth_date"
+      ></text-input>
     </div>
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Hire Date"
-        label-for="txtHireDate"
-        :invalid-feedback="this.fbHireDate"
-        :state="this.fbHireDate.length == 0"
-      >
-        <b-form-input
-          id="txtHireDate"
-          v-model="hire_date"
-          :state="this.fbHireDate.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="hire_date"
+      ></text-input>
     </div>
     <contact-detail
       :address.sync="address"
@@ -119,37 +69,20 @@
     ></contact-detail>
 
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Notes"
-        label-for="txtNotes"
-        :invalid-feedback="this.fbNotes"
-        :state="this.fbNotes.length == 0"
-      >
-        <b-form-input
-          id="txtNotes"
-          v-model="notes"
-          :state="this.fbNotes.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="notes"
+      ></text-input>
     </div>
     <div>
-      <b-form-group
-        description=""
-        label="Reports to"
-        label-for="txtReportsTo"
-        :invalid-feedback="this.fbReportsTo"
-        :state="this.fbReportsTo.length == 0"
-      >
-        <b-form-input
-          id="txtReportsTo"
-          type="number"
-          v-model="reports_to"
-          :state="this.fbReportsTo.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+      <text-input
+        label="Reports To"
+        required
+        type="text"
+        v-model="reports_to"
+      ></text-input>
     </div>
     <b-button @click="this.save" block>Save</b-button>
   </div>
@@ -158,8 +91,9 @@
 <script>
 import ContactDetail from '~/components/ContactDetail';
 import SelectInput from '~/components/SelectInput';
+import TextInput from '~/components/TextInput';
 export default {
-  components: { ContactDetail, SelectInput },
+  components: { TextInput, ContactDetail, SelectInput },
   data() {
     return {
       hire_date: '',
@@ -180,35 +114,7 @@ export default {
       title_of_courtesy: ''
     };
   },
-  computed: {
-    fbEmployeeId() {
-      return '';
-    },
-    fbFirstName() {
-      return '';
-    },
-    fbLastName() {
-      return '';
-    },
-    fbJobTitle() {
-      return '';
-    },
-    fbSalutations() {
-      return '';
-    },
-    fbBirthDate() {
-      return '';
-    },
-    fbHireDate() {
-      return '';
-    },
-    fbNotes() {
-      return '';
-    },
-    fbReportsTo() {
-      return '';
-    }
-  },
+
   methods: {
     async save() {
       const data = JSON.parse(JSON.stringify(this._data));
