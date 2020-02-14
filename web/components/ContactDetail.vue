@@ -1,191 +1,95 @@
 <template>
   <div>
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Address"
-        label-for="txtAddress"
-        :invalid-feedback="this.fbAddress"
-        :state="this.fbAddress.length == 0"
-      >
-        <b-form-input
-          id="txtAddress"
-          v-model="address"
-          :state="this.fbAddress.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="dtAddress"
+        @input="value => $emit('update:address', value)"
+        :feedback.sync="feedback.address"
+      ></text-input>
     </div>
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="City"
-        label-for="txtCity"
-        :invalid-feedback="this.fbCity"
-        :state="this.fbCity.length == 0"
-      >
-        <b-form-input
-          id="txtCity"
-          v-model="city"
-          :state="this.fbCity.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="dtCity"
+        @input="value => $emit('update:city', value)"
+      ></text-input>
     </div>
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Region"
-        label-for="txtRegion"
-        :invalid-feedback="this.fbRegion"
-        :state="this.fbRegion.length == 0"
-      >
-        <b-form-input
-          id="txtRegion"
-          v-model="region"
-          :state="this.fbRegion.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="dtRegion"
+        @input="value => $emit('update:region', value)"
+      ></text-input>
     </div>
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Postal Code"
-        label-for="txtPostalCode"
-        :invalid-feedback="this.fbPostalCode"
-        :state="this.fbPostalCode.length == 0"
-      >
-        <b-form-input
-          id="txtPostalCode"
-          v-model="postalCode"
-          :state="this.fbPostalCode.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="dtPostalCode"
+        @input="value => $emit('update:postal-code', value)"
+      ></text-input>
     </div>
     <div>
-      <b-form-group
-        description=""
-        label="Country"
-        label-for="txtCountry"
-        :invalid-feedback="this.fbCountry"
-        :state="this.fbCountry.length == 0"
-      >
-        <b-form-input
-          id="txtCountry"
-          v-model="country"
-          :state="this.fbCountry.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+      <country-select
+        :id="this.$shortid()"
+        v-model="dtCountry"
+        required
+        @input="value => $emit('update:country', value)"
+      ></country-select>
     </div>
     <div>
-      <b-form-group
-        description=""
+      <text-input
         label="Phone"
-        label-for="txtPhone"
-        :invalid-feedback="this.fbPhone"
-        :state="this.fbPhone.length == 0"
-      >
-        <b-form-input
-          id="txtPhone"
-          v-model="phone"
-          :state="this.fbPhone.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
-    </div>
-    <div v-if="this.hasFax">
-      <b-form-group
-        description=""
-        label="Fax"
-        label-for="txtFax"
-        :invalid-feedback="this.fbFax"
-        :state="this.fbFax.length == 0"
-      >
-        <b-form-input
-          id="txtFax"
-          v-model="fax"
-          :state="this.fbFax.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        required
+        type="text"
+        v-model="dtPhone"
+        @input="value => $emit('update:phone', value)"
+      ></text-input>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  props: {
-    pAddress: String,
-    pCity: String,
-    pRegion: String,
-    pPostalCode: String,
-    pCountry: String,
-    pPhone: String,
-    pFax: String,
+import CountrySelect from '~/components/CountrySelect';
+import TextInput from '~/components/TextInput';
 
-    pHasFax: Boolean
+export default {
+  components: {
+    CountrySelect,
+    TextInput
+  },
+  props: {
+    address: { type: String, default: '' },
+    city: { type: String, default: '' },
+    region: { type: String, default: '' },
+    postalCode: { type: String, default: '' },
+    country: { type: String, default: '' },
+    phone: { type: String, default: '' },
+    fax: { type: String, default: '' },
+
+    hasFax: { type: Boolean, default: false }
   },
   data() {
     return {
-      address: this.pAddress ?? '',
-      city: this.pCity ?? '',
-      region: this.pRegion ?? '',
-      postalCode: this.pPostalCode ?? '',
-      country: this.pCountry ?? '',
-      phone: this.pPhone ?? '',
-      fax: this.pFax ?? '',
-      hasFax: this.pHasFax
+      dtAddress: this.address,
+      dtCity: this.address,
+      dtRegion: this.address,
+      dtPostalCode: this.postalCode,
+      dtCountry: this.address,
+      dtPhone: this.address,
+      dtFax: this.address,
+      feedback: {
+        address: ''
+      }
     };
-  },
-  watch: {
-    address: function(upd, old) {
-      this.$emit('update:p-address', upd);
-    },
-    city: function(upd, old) {
-      this.$emit('update:p-city', upd);
-    },
-    region: function(upd, old) {
-      this.$emit('update:p-region', upd);
-    },
-    postalCode: function(upd, old) {
-      this.$emit('update:p-postal-code', upd);
-    },
-    country: function(upd, old) {
-      this.$emit('update:p-country', upd);
-    },
-    phone: function(upd, old) {
-      this.$emit('update:p-phone', upd);
-    },
-    fax: function(upd, old) {
-      this.$emit('update:p-fax', upd);
-    }
-  },
-  computed: {
-    fbAddress() {
-      return '';
-    },
-    fbCity() {
-      return '';
-    },
-    fbRegion() {
-      return '';
-    },
-    fbPostalCode() {
-      return '';
-    },
-    fbCountry() {
-      return '';
-    },
-    fbPhone() {
-      return '';
-    },
-    fbFax() {
-      if (!this.hasFax) return '';
-      return '';
-    }
   }
 };
 </script>

@@ -51,8 +51,8 @@ export class AuthController {
     @Res() res: Response,
   ) {
     const user = await this.authService.validateUser(userId, password);
-    if (!user) res.status(400).send('User does not exists');
-    else await this._signIn(userId, res);
+    if (user) await this._signIn(userId, res);
+    else res.status(400).send('User does not exists');
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -65,11 +65,10 @@ export class AuthController {
   @HttpCode(200)
   @Get('hasura')
   async validateHasura(@Req() req) {
-    const hasuraVariables = {
+    return {
       'X-Hasura-User-Id': req.user.userId,
       'X-Hasura-Role': req.user.role,
     };
-    return hasuraVariables;
   }
 
   @Post('token/refresh')
@@ -96,8 +95,7 @@ export class AuthController {
   _getRefreshTokenCookie(req: Request) {
     const cookies = new URLSearchParams(req.headers.cookie.replace(/;/g, '&'));
 
-    const refreshToken = cookies.get('refresh_token');
-    return refreshToken;
+    return cookies.get('refresh_token');
   }
 
   _getRefreshTokenOptions() {

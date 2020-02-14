@@ -30,7 +30,11 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/axios.client.js', '~/plugins/auth.client.js'],
+  plugins: [
+    '~/plugins/axios.client.js',
+    '~/plugins/auth.client.js',
+    '~/plugins/shortid.js'
+  ],
   /*
    ** Nuxt.js dev-modules
    */

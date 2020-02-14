@@ -69,20 +69,12 @@
       </b-form-group>
     </div>
     <div>
-      <b-form-group
-        description=""
+      <select-input
         label="Salutations"
-        label-for="txtSalutations"
-        :invalid-feedback="this.fbSalutations"
-        :state="this.fbSalutations.length == 0"
-      >
-        <b-form-input
-          id="txtSalutations"
-          v-model="title_of_courtesy"
-          :state="this.fbSalutations.length == 0"
-          trim
-        ></b-form-input>
-      </b-form-group>
+        :selections="['Mr.', 'Ms.', 'Mrs.']"
+        v-model="title_of_courtesy"
+        required
+      ></select-input>
     </div>
 
     <div>
@@ -118,12 +110,12 @@
       </b-form-group>
     </div>
     <contact-detail
-      :p-address.sync="address"
-      :p-city.sync="city"
-      :p-region.sync="region"
-      :p-postal-code.sync="postal_code"
-      :p-country.sync="country"
-      :p-phone.sync="home_phone"
+      :address.sync="address"
+      :city.sync="city"
+      :region.sync="region"
+      :postal-code.sync="postal_code"
+      :country.sync="country"
+      :phone.sync="home_phone"
     ></contact-detail>
 
     <div>
@@ -165,8 +157,9 @@
 
 <script>
 import ContactDetail from '~/components/ContactDetail';
+import SelectInput from '~/components/SelectInput';
 export default {
-  components: { ContactDetail },
+  components: { ContactDetail, SelectInput },
   data() {
     return {
       hire_date: '',
@@ -219,7 +212,8 @@ export default {
   methods: {
     async save() {
       const data = JSON.parse(JSON.stringify(this._data));
-      this.$store.dispatch('employee/save', data);
+      //this.$store.dispatch('employee/save', data);
+      console.log(data);
     }
   }
 };

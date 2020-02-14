@@ -1,7 +1,7 @@
 export default function({ $axios, redirect, store, app }) {
   $axios.onRequest(config => {
     const accessToken = app.$cookies.get('access_token');
-    console.log('hahah', config);
+
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
@@ -14,7 +14,7 @@ export default function({ $axios, redirect, store, app }) {
         } = response,
         [error = {}] = errors,
         { extensions: { code = '' } = {} } = error;
-      console.log(code, url);
+
       if (code.toLowerCase() == 'access-denied' && url == '/gql') {
         await store.dispatch('auth/refreshToken');
         await $axios.request(response.config);

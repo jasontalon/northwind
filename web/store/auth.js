@@ -56,6 +56,8 @@ export const actions = {
         await dispatch('refreshToken');
     } catch (error) {
       await dispatch('signInAsGuest');
+    } finally {
+      await dispatch('validateUser');
     }
   },
 
