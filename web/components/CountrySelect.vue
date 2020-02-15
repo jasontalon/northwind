@@ -6,6 +6,7 @@
     :readonly="this.readonly"
     :value="this.value"
     @input="value => $emit('input', value)"
+    @feedback="value => $emit('feedback', value)"
   ></select-input>
 </template>
 
@@ -20,7 +21,6 @@ export default {
     value: { type: String, default: '' },
     required: { type: Boolean, default: false }
   },
-
   data() {
     return {
       countries: [

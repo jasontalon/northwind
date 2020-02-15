@@ -4,8 +4,10 @@
       <text-input
         label="Employee #"
         required
-        type="text"
+        type="number"
         v-model="employee_id"
+        max="32727"
+        @feedback="message => setFeedback('employee_id', message)"
       ></text-input>
     </div>
     <div>
@@ -14,6 +16,8 @@
         required
         type="text"
         v-model="first_name"
+        maxlength="10"
+        @feedback="message => setFeedback('first_name', message)"
       ></text-input>
     </div>
 
@@ -22,7 +26,9 @@
         label="Last Name"
         required
         type="text"
+        maxlength="20"
         v-model="last_name"
+        @feedback="message => setFeedback('last_name', message)"
       ></text-input>
     </div>
 
@@ -31,7 +37,9 @@
         label="Job Title"
         required
         type="text"
+        maxlength="30"
         v-model="title"
+        @feedback="message => setFeedback('title', message)"
       ></text-input>
     </div>
     <div>
@@ -39,7 +47,7 @@
         label="Salutations"
         :selections="['Mr.', 'Ms.', 'Mrs.']"
         v-model="title_of_courtesy"
-        
+        @feedback="message => setFeedback('title_of_courtesy', message)"
       ></select-input>
     </div>
 
@@ -47,7 +55,7 @@
       <text-input
         label="Birth Date"
         required
-        type="text"
+        type="date"
         v-model="birth_date"
       ></text-input>
     </div>
@@ -55,7 +63,7 @@
       <text-input
         label="Hire Date"
         required
-        type="text"
+        type="date"
         v-model="hire_date"
       ></text-input>
     </div>
@@ -66,6 +74,7 @@
       :postal-code.sync="postal_code"
       :country.sync="country"
       :phone.sync="home_phone"
+      @feedbacks="value => value.forEach(v => setFeedback(v.key, v.message))"
     ></contact-detail>
 
     <div>
@@ -80,7 +89,8 @@
       <text-input
         label="Reports To"
         required
-        type="text"
+        type="number"
+        max="32000"
         v-model="reports_to"
       ></text-input>
     </div>
@@ -94,6 +104,7 @@ import SelectInput from '~/components/SelectInput';
 import TextInput from '~/components/TextInput';
 export default {
   components: { TextInput, ContactDetail, SelectInput },
+  feedback: [],
   data() {
     return {
       hire_date: '',
@@ -114,11 +125,16 @@ export default {
       title_of_courtesy: ''
     };
   },
-
   methods: {
+    setFeedback(key, message) {
+      this.$options.feedback = this.$options.feedback.filter(p => p.key != key);
+      if (message) this.$options.feedback.push({ key, message });
+    },
     async save() {
+      if (this.$options.feedback.length > 0)
+        console.log('has validation errors', this.$options.feedback);
       const data = JSON.parse(JSON.stringify(this._data));
-      //this.$store.dispatch('employee/save', data);
+      await this.$store.dispatch('employee/save', data);
       console.log(data);
     }
   }

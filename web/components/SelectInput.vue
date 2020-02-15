@@ -45,7 +45,7 @@ export default {
       else if (this.value.length == 0) feedback = `${this.label} is required.`;
       else if (!this.selections.includes(this.value))
         feedback = `Invalid ${this.label}.`;
-      this.$emit('update:feedback', feedback);
+      this.$emit('feedback', feedback);
       return feedback;
     }
   }
