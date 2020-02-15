@@ -52,8 +52,8 @@
       </b-collapse>
     </b-navbar>
 
-    <b-container fluid class="my-2 flex-grow-1"><nuxt /> </b-container>
-    <footer class="fixed-bottom">
+    <b-container fluid class="my-2 flex-grow-1 pb-5"><nuxt /> </b-container>
+    <footer class="fixed-bottom mt-3">
       <div class="d-flex justify-content-center py-2">
         &mdash; Northwind {{ new Date().getFullYear() }} &mdash;
       </div>
