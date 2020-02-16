@@ -55,7 +55,7 @@ export default {
       )
         feedback = 'Max number reached.';
       //make regex validations
-      this.$emit('feedback', feedback);
+      this.$emit('feedback', { label: this.label || '', message: feedback });
       return feedback;
     }
   },

@@ -6,9 +6,8 @@
         required
         type="text"
         maxlength="60"
-        v-model="dtAddress"
-        @input="value => $emit('update:address', value)"
-        @feedback="message => setFeedback('address', message)"
+        v-model="address"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -17,9 +16,8 @@
         required
         type="text"
         maxlength="15"
-        v-model="dtCity"
-        @input="value => $emit('update:city', value)"
-        @feedback="message => setFeedback('city', message)"
+        v-model="city"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -28,9 +26,8 @@
         required
         type="text"
         maxlength="15"
-        v-model="dtRegion"
-        @input="value => $emit('update:region', value)"
-        @feedback="message => setFeedback('region', message)"
+        v-model="region"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -39,18 +36,16 @@
         required
         type="text"
         maxlength="10"
-        v-model="dtPostalCode"
-        @input="value => $emit('update:postal-code', value)"
-        @feedback="message => setFeedback('postal-code', message)"
+        v-model="postal_code"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
       <country-select
-        v-model="dtCountry"
+        v-model="country"
         required
         maxlength="15"
-        @input="value => $emit('update:country', value)"
-        @feedback="message => setFeedback('country', message)"
+        @feedback="setFeedback"
       ></country-select>
     </div>
     <div>
@@ -58,9 +53,8 @@
         label="Phone"
         required
         type="text"
-        v-model="dtPhone"
-        @input="value => $emit('update:phone', value)"
-        @feedback="message => setFeedback('phone', message)"
+        v-model="phone"
+        @feedback="setFeedback"
       ></form-input>
     </div>
   </div>
@@ -76,35 +70,49 @@ export default {
     CountrySelect,
     FormInput
   },
+  initFields() {
+    const fields = [
+      'address',
+      'city',
+      'region',
+      'postal_code',
+      'country',
+      'phone'
+    ];
+    return fields.reduce((acc, field) => {
+      acc[field] = '';
+      return acc;
+    }, {});
+  },
   props: {
-    address: { type: String, default: '' },
-    city: { type: String, default: '' },
-    region: { type: String, default: '' },
-    postalCode: { type: String, default: '' },
-    country: { type: String, default: '' },
-    phone: { type: String, default: '' },
-    fax: { type: String, default: '' },
-    hasFax: { type: Boolean, default: false }
+    value: {
+      type: Object,
+      default: function() {
+        return this.$options.initFields();
+      }
+    }
   },
   data() {
-    return {
-      dtAddress: this.address,
-      dtCity: this.city,
-      dtRegion: this.region,
-      dtPostalCode: this.postalCode,
-      dtCountry: this.country,
-      dtPhone: this.phone,
-      dtFax: this.fax
-    };
+    const data = _.pick(
+      { ...this.$options.initFields(), ...this.value },
+      this.$_.keys(this.$options.initFields())
+    );
+    return data;
   },
   methods: {
-    setFeedback(key, message) {
+    setFeedback({ key, message }) {
       this.$options.feedbacks = this.$options.feedbacks.filter(
         p => p.key != key
       );
       this.$options.feedbacks.push({ key, message });
       this.$emit('feedbacks', this.$options.feedbacks);
     }
+  },
+  mounted() {
+    this.$watch(
+      vm => vm.$_.values(vm.$data),
+      val => this.$emit('input', this.$data)
+    );
   }
 };
 </script>

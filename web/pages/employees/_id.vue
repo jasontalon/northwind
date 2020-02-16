@@ -1,5 +1,5 @@
 <template>
-  <employee-form v-model="employee" @save="save"></employee-form>
+  <employee-form @save="save"></employee-form>
 </template>
 
 <script>
@@ -10,8 +10,6 @@ export default {
   },
   data() {
     return {
-      title: 'Mr.',
-      firstName: '',
       feedbacks: [],
       employee: {}
     };
@@ -22,10 +20,11 @@ export default {
     return id == 'create' || /\d{1,5}/.test(id);
   },
   created() {
-    this.employee = { first_name: 'jason', last_name: 'talon' };
-  },
-  mounted() {
-    this.$set(this.employee, 'title_of_courtesy', 'Mr.');
+    this.employee = {
+      first_name: 'jason',
+      last_name: 'talon',
+      address: '77 parada'
+    };
   },
 
   methods: {

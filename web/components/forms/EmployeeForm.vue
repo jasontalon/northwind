@@ -7,8 +7,8 @@
         type="number"
         v-model="employee_id"
         max="32727"
-        :readonly="this.createNew"
-        @feedback="message => setFeedback('employee_id', message)"
+        :readonly="createNew"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -18,7 +18,7 @@
         type="text"
         v-model="first_name"
         maxlength="10"
-        @feedback="message => setFeedback('first_name', message)"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -28,7 +28,7 @@
         type="text"
         maxlength="20"
         v-model="last_name"
-        @feedback="message => setFeedback('last_name', message)"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -38,7 +38,7 @@
         type="text"
         maxlength="30"
         v-model="title"
-        @feedback="message => setFeedback('title', message)"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -47,7 +47,7 @@
         :selections="['Mr.', 'Ms.', 'Mrs.']"
         maxlength="25"
         v-model="title_of_courtesy"
-        @feedback="message => setFeedback('title_of_courtesy', message)"
+        @feedback="message => setFeedback"
       ></select-input>
     </div>
     <div>
@@ -56,7 +56,7 @@
         required
         type="date"
         v-model="birth_date"
-        @feedback="message => setFeedback('birth_date', message)"
+        @feedback="message => setFeedback"
       ></form-input>
     </div>
     <div>
@@ -65,17 +65,12 @@
         required
         type="date"
         v-model="hire_date"
-        @feedback="message => setFeedback('hire_date', message)"
+        @feedback="message => setFeedback"
       ></form-input>
     </div>
     <contact-form
-      :address.sync="address"
-      :city.sync="city"
-      :region.sync="region"
-      :postal-code.sync="postal_code"
-      :country.sync="country"
-      :phone.sync="home_phone"
-      @feedbacks="value => value.forEach(v => setFeedback(v.key, v.message))"
+      v-model="contact"
+      @feedbacks="value => value.forEach(setFeedback)"
     ></contact-form>
     <div>
       <form-input
@@ -83,7 +78,7 @@
         required
         type="text"
         v-model="notes"
-        @feedback="message => setFeedback('notes', message)"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -93,7 +88,7 @@
         type="number"
         max="32000"
         v-model="reports_to"
-        @feedback="message => setFeedback('reports_to', message)"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <b-button @click="this.save" block :disabled="this.feedbacks"
@@ -109,58 +104,70 @@ import FormInput from '~/components/FormInput';
 export default {
   components: { FormInput, ContactForm, SelectInput },
   feedbacks: [],
+  initFields() {
+    const fields = [
+      'hire_date',
+      'reports_to',
+      'birth_date',
+      'employee_id',
+      'address',
+      'city',
+      'region',
+      'postal_code',
+      'country',
+      'home_phone',
+      'extension',
+      'notes',
+      'last_name',
+      'first_name',
+      'title',
+      'title_of_courtesy'
+    ];
+    return fields.reduce((acc, field) => {
+      acc[field] = '';
+      return acc;
+    }, {});
+  },
   props: {
     createNew: { type: Boolean, default: false },
     value: {
       type: Object,
       default: function() {
-        return this.initFields();
+        return this.$options.initFields();
       }
     }
   },
   data() {
-    const data = { ...this.initFields(), ...this.value };
+    const data = { ...this.$options.initFields(), ...this.value };
+
+    const contact = this.$_.pick(data, [
+      'address',
+      'city',
+      'region',
+      'postal_code',
+      'country',
+      'home_phone'
+    ]);
     return {
       ...data,
+      contact,
       feedbacks: false
     };
   },
   methods: {
-    initFields() {
-      const fields = [
-        'hire_date',
-        'reports_to',
-        'birth_date',
-        'employee_id',
-        'address',
-        'city',
-        'region',
-        'postal_code',
-        'country',
-        'home_phone',
-        'extension',
-        'notes',
-        'last_name',
-        'first_name',
-        'title',
-        'title_of_courtesy'
-      ];
-      return fields.reduce((acc, field) => {
-        acc[field] = '';
-        return acc;
-      }, {});
-    },
-    setFeedback(key, message) {
+    setFeedback({ key, message }) {
       this.$options.feedbacks = this.$options.feedbacks.filter(
         p => p.key != key
       );
       if (message) this.$options.feedbacks.push({ key, message });
       this.feedbacks = this.$options.feedbacks.length > 0;
+
       this.$emit('update:feedbacks', this.$options.feedbacks);
     },
     getData() {
       return this.$_.omit(JSON.parse(JSON.stringify(this._data)), [
-        'feedbacks'
+        'feedbacks',
+        'contact'
       ]);
     },
     async save() {
@@ -169,7 +176,8 @@ export default {
   },
   mounted() {
     this.$watch(
-      vm => vm.$_.values(vm.$data).join(),
+      vm =>
+        [...vm.$_.values(vm.$data), ...vm.$_.values(vm.$data.contact)].join(),
       val => this.$emit('input', this.getData())
     );
   }
