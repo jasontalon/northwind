@@ -1,9 +1,5 @@
 <template>
-  <employee-form
-    :p-first-name.sync="firstName"
-    :p-feedbacks.sync="feedbacks"
-    :p-title.sync="title"
-  ></employee-form>
+  <employee-form v-model="employee" @save="save"></employee-form>
 </template>
 
 <script>
@@ -16,7 +12,8 @@ export default {
     return {
       title: 'Mr.',
       firstName: '',
-      feedbacks: []
+      feedbacks: [],
+      employee: {}
     };
   },
   validate({ params }) {
@@ -24,15 +21,17 @@ export default {
 
     return id == 'create' || /\d{1,5}/.test(id);
   },
-  mounted() {
-    console.log(this.$route);
+  created() {
+    this.employee = { first_name: 'jason', last_name: 'talon' };
   },
-  watch: {
-    firstName(upd) {
-      console.log(upd);
-    },
-    feedbacks(val){
-      console.log(val);
+  mounted() {
+    this.$set(this.employee, 'title_of_courtesy', 'Mr.');
+  },
+
+  methods: {
+    async save(employee) {
+      console.log(this.employee);
+      await this.$store.dispatch('employee/save', employee);
     }
   }
 };
