@@ -1,10 +1,10 @@
 <template>
   <div class="mx-auto" style="max-width:550px;">
-    <sign-in
+    <sign-in-form
       v-bind:p-username.sync="username"
       v-bind:p-password.sync="password"
     >
-    </sign-in>
+    </sign-in-form>
     <div>
       <b-form-group
         description=""
@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import SignIn from '~/components/SignIn';
+import SignInForm from '~/components/forms/SignInForm';
 import { mapState } from 'vuex';
 export default {
-  components: { SignIn },
+  components: { SignInForm },
   data() {
     return {
       username: '',

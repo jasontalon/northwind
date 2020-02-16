@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <text-input
+      <form-input
         label="Address"
         required
         type="text"
@@ -9,10 +9,10 @@
         v-model="dtAddress"
         @input="value => $emit('update:address', value)"
         @feedback="message => setFeedback('address', message)"
-      ></text-input>
+      ></form-input>
     </div>
     <div>
-      <text-input
+      <form-input
         label="City"
         required
         type="text"
@@ -20,10 +20,10 @@
         v-model="dtCity"
         @input="value => $emit('update:city', value)"
         @feedback="message => setFeedback('city', message)"
-      ></text-input>
+      ></form-input>
     </div>
     <div>
-      <text-input
+      <form-input
         label="Region"
         required
         type="text"
@@ -31,10 +31,10 @@
         v-model="dtRegion"
         @input="value => $emit('update:region', value)"
         @feedback="message => setFeedback('region', message)"
-      ></text-input>
+      ></form-input>
     </div>
     <div>
-      <text-input
+      <form-input
         label="Postal Code"
         required
         type="text"
@@ -42,7 +42,7 @@
         v-model="dtPostalCode"
         @input="value => $emit('update:postal-code', value)"
         @feedback="message => setFeedback('postal-code', message)"
-      ></text-input>
+      ></form-input>
     </div>
     <div>
       <country-select
@@ -54,27 +54,27 @@
       ></country-select>
     </div>
     <div>
-      <text-input
+      <form-input
         label="Phone"
         required
         type="text"
         v-model="dtPhone"
         @input="value => $emit('update:phone', value)"
         @feedback="message => setFeedback('phone', message)"
-      ></text-input>
+      ></form-input>
     </div>
   </div>
 </template>
 
 <script>
 import CountrySelect from '~/components/CountrySelect';
-import TextInput from '~/components/TextInput';
+import FormInput from '~/components/FormInput';
 
 export default {
   feedbacks: [],
   components: {
     CountrySelect,
-    TextInput
+    FormInput
   },
   props: {
     address: { type: String, default: '' },
