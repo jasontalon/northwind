@@ -2,17 +2,6 @@
   <div>
     <div>
       <form-input
-        label="Employee #"
-        required
-        type="number"
-        v-model="employee_id"
-        max="32727"
-        :readonly="createNew"
-        @feedback="setFeedback"
-      ></form-input>
-    </div>
-    <div>
-      <form-input
         label="First Name"
         required
         type="text"
@@ -47,7 +36,7 @@
         :selections="['Mr.', 'Ms.', 'Mrs.']"
         maxlength="25"
         v-model="title_of_courtesy"
-        @feedback="message => setFeedback"
+        @feedback="setFeedback"
       ></select-input>
     </div>
     <div>
@@ -56,7 +45,7 @@
         required
         type="date"
         v-model="birth_date"
-        @feedback="message => setFeedback"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <div>
@@ -65,7 +54,7 @@
         required
         type="date"
         v-model="hire_date"
-        @feedback="message => setFeedback"
+        @feedback="setFeedback"
       ></form-input>
     </div>
     <contact-form
@@ -129,7 +118,6 @@ export default {
     }, {});
   },
   props: {
-    createNew: { type: Boolean, default: false },
     value: {
       type: Object,
       default: function() {
@@ -171,6 +159,8 @@ export default {
       ]);
     },
     async save() {
+      const employee = { ...this.getData(), ...this.$data.contact };
+      console.log(employee);
       this.$emit('save', this.getData());
     }
   },

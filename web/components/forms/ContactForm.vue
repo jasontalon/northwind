@@ -53,7 +53,7 @@
         label="Phone"
         required
         type="text"
-        v-model="phone"
+        v-model="home_phone"
         @feedback="setFeedback"
       ></form-input>
     </div>
@@ -77,7 +77,7 @@ export default {
       'region',
       'postal_code',
       'country',
-      'phone'
+      'home_phone'
     ];
     return fields.reduce((acc, field) => {
       acc[field] = '';

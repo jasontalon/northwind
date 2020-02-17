@@ -17,20 +17,16 @@ export default {
   validate({ params }) {
     const id = params.id;
 
-    return id == 'create' || /\d{1,5}/.test(id);
+    return /\d{1,5}/.test(id);
   },
-  created() {
-    this.employee = {
-      first_name: 'jason',
-      last_name: 'talon',
-      address: '77 parada'
-    };
-  },
+  async created() {},
 
   methods: {
+    async load(employeeId) {},
     async save(employee) {
-      console.log(this.employee);
-      await this.$store.dispatch('employee/save', employee);
+      const _emp = this.$_.omit(this.employee, ['employee_id']);
+      console.log(_emp);
+      await this.$store.dispatch('employee/save', _emp);
     }
   }
 };

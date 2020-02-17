@@ -31,10 +31,13 @@ const _signInAsGuest = async axios => {
 
 export const actions = {
   setCookieToken({ commit }, access_token) {
-    commit('setAccessToken', access_token);
-    this.app.$cookies.set('access_token', access_token, {
+    const cookieOptions = {
       maxAge: 3600 //1 hour
-    });
+    };
+    //reset cookie
+    this.app.$cookies.remove('access_token', cookieOptions);
+    this.app.$cookies.set('access_token', access_token, cookieOptions);
+    commit('setAccessToken', access_token);
   },
   async refreshToken({ dispatch }) {
     const response = await this.$axios.$post('/api/auth/token/refresh');
