@@ -1,33 +1,71 @@
 <template>
   <div>
-    <form-input
-      type="text"
-      label="First name"
-      v-model="first_name"
-    ></form-input>
-    <form-input type="text" label="Last name" v-model="last_name"></form-input>
-    <b-button @click="search" :disabled="isBusy">Search</b-button>
-    <b-table
-      no-local-sorting
-      :items="items"
-      :fields="fields"
-      @sort-changed="sortingChanged"
-      :busy.sync="isBusy"
-    >
-    </b-table>
-    <b-form-select
-      style="max-width:80px;"
-      v-model="perPage"
-      @input="search"
-      :options="[10, 50, 100]"
-    ></b-form-select>
-    <b-pagination
-      v-model="currentPage"
-      :total-rows="itemCount"
-      :per-page="perPage"
-      aria-controls="my-table"
-      @input="search"
-    ></b-pagination>
+    <b-container>
+      <b-form-row>
+        <b-col md="6"
+          ><form-input
+            type="text"
+            label="First name"
+            v-model="first_name"
+          ></form-input
+        ></b-col>
+        <b-col md="6"
+          ><form-input
+            type="text"
+            label="Last name"
+            v-model="last_name"
+          ></form-input
+        ></b-col>
+      </b-form-row>
+      <b-row
+        ><b-col class="d-flex justify-content-center">
+          <b-button
+            block
+            @click="search"
+            :disabled="isBusy"
+            class=""
+            style="max-width:400px;"
+            >Search</b-button
+          ></b-col
+        ></b-row
+      >
+      <b-row>
+        <b-table
+          class="mt-3"
+          no-local-sorting
+          :items="items"
+          :fields="fields"
+          @sort-changed="sortingChanged"
+          :busy.sync="isBusy"
+        >
+          <template v-slot:cell(actions)="data">
+            <b-button :to="'/employees/' + data.item.employee_id">
+              View
+            </b-button>
+          </template>
+        </b-table></b-row
+      >
+      <b-row>
+        <b-col class="d-flex justify-content-end ">
+          <div>Total Count : {{ itemCount }}</div>
+          <b-form-select
+            class="ml-2"
+            style="max-width:80px;"
+            v-model="perPage"
+            @input="search"
+            :options="[10, 50, 100]"
+          ></b-form-select>
+          <b-pagination
+            class="ml-2"
+            v-model="currentPage"
+            :total-rows="itemCount"
+            :per-page="perPage"
+            aria-controls="my-table"
+            @input="search"
+          ></b-pagination
+        ></b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -36,6 +74,7 @@ import FormInput from '~/components/FormInput';
 export default {
   components: { FormInput },
   columns: [
+    { key: 'actions', label: '' },
     { key: 'employee_id', label: '#', sortable: true },
     { key: 'first_name', label: 'First name', sortable: true },
     { key: 'last_name', label: 'Last name', sortable: true }

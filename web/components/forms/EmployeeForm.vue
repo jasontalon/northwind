@@ -127,7 +127,7 @@ export default {
   },
   data() {
     const data = { ...this.$options.initFields(), ...this.value };
-
+  console.log(data);
     const contact = this.$_.pick(data, [
       'address',
       'city',
@@ -141,6 +141,11 @@ export default {
       contact,
       feedbacks: false
     };
+  },
+  watch: {
+    first_name(val) {
+      console.log(val);
+    }
   },
   methods: {
     setFeedback({ key, message }) {

@@ -13,7 +13,8 @@ export default {
   methods: {
     async save(employee) {
       const response = await this.$axios.$post('/gql', {
-        query: `query { employees(limit: 1, order_by: {employee_id: desc}) { employee_id } }`
+        query:
+          'query { employees(limit: 1, order_by: {employee_id: desc}) { employee_id } }'
       });
 
       const latestEmployeeId = this.$_.get(
