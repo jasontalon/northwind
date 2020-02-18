@@ -97,7 +97,11 @@ export const actions = {
 
   async signOut({ dispatch }) {
     await this.$axios.$post('/api/auth/token/expire');
-    this.app.$cookies.removeAll();
+    const cookieOptions = {
+      maxAge: 3600 //1 hour
+    };
+    //reset cookie
+    this.app.$cookies.remove('access_token', cookieOptions);
     await dispatch('checkAuth');
   }
 };

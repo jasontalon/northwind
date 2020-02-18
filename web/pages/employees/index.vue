@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import EmployeeLookupForm from '~/components/forms/EmployeeLookupForm';
+import EmployeeLookupForm from '~/components/employee/forms/EmployeeLookupForm';
 export default {
   components: {
     EmployeeLookupForm

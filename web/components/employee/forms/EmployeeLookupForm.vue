@@ -3,18 +3,18 @@
     <b-container>
       <b-form-row>
         <b-col md="6"
-          ><form-input
+          ><form-text-input
             type="text"
             label="First name"
             v-model="first_name"
-          ></form-input
+          ></form-text-input
         ></b-col>
         <b-col md="6"
-          ><form-input
+          ><form-text-input
             type="text"
             label="Last name"
             v-model="last_name"
-          ></form-input
+          ></form-text-input
         ></b-col>
       </b-form-row>
       <b-row
@@ -76,9 +76,9 @@
 </template>
 
 <script>
-import FormInput from '~/components/FormInput';
+import FormTextInput from '~/components/FormTextInput';
 export default {
-  components: { FormInput },
+  components: { FormTextInput },
   columns: [
     { key: 'employee_id', label: '#', sortable: true },
     { key: 'first_name', label: 'First name', sortable: true },

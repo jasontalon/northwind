@@ -2,23 +2,23 @@
   <div>
     <b-form-row>
       <b-col md="3">
-        <form-input
+        <form-text-input
           label="Hire Date"
           required
           type="date"
           v-model="hire_date"
           @feedback="setFeedback"
-        ></form-input>
+        ></form-text-input>
       </b-col>
       <b-col md="5">
-        <form-input
+        <form-text-input
           label="Job Title"
           required
           type="text"
           maxlength="30"
           v-model="title"
           @feedback="setFeedback"
-        ></form-input
+        ></form-text-input
       ></b-col>
       <b-col md="4"
         ><employee-name-select-input
@@ -44,41 +44,41 @@
             ></select-input
           ></b-col>
           <b-col md="12"
-            ><form-input
+            ><form-text-input
               label="First Name"
               required
               type="text"
               v-model="first_name"
               maxlength="10"
               @feedback="setFeedback"
-            ></form-input
+            ></form-text-input
           ></b-col>
           <b-col md="12"
-            ><form-input
+            ><form-text-input
               label="Last Name"
               required
               type="text"
               maxlength="20"
               v-model="last_name"
               @feedback="setFeedback"
-            ></form-input
+            ></form-text-input
           ></b-col>
           <b-col md="12"
-            ><form-input
+            ><form-text-input
               label="Birth Date"
               required
               type="date"
               v-model="birth_date"
               @feedback="setFeedback"
-            ></form-input
+            ></form-text-input
           ></b-col>
           <b-col>
-            <form-text-area
+            <form-text-area-input
               label="Notes"
               v-model="notes"
               rows="5"
               @feedback="setFeedback"
-            ></form-text-area>
+            ></form-text-area-input>
           </b-col>
         </b-form-row>
       </b-col>
@@ -102,13 +102,13 @@
 <script>
 import ContactForm from '~/components/forms/ContactForm';
 import SelectInput from '~/components/SelectInput';
-import FormInput from '~/components/FormInput';
-import FormTextArea from '~/components/FormTextArea';
-import EmployeeNameSelectInput from '~/components/EmployeeNameSelectInput';
+import FormTextInput from '~/components/FormTextInput';
+import FormTextAreaInput from '~/components/FormTextAreaInput';
+import EmployeeNameSelectInput from '~/components/employee/EmployeeNameSelectInput';
 export default {
   components: {
-    FormTextArea,
-    FormInput,
+    FormTextAreaInput,
+    FormTextInput,
     ContactForm,
     SelectInput,
     EmployeeNameSelectInput

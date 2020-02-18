@@ -1,74 +1,74 @@
 <template>
   <div>
     <div>
-      <form-input
+      <form-text-input
         label="Address"
         required
         type="text"
         maxlength="60"
         v-model="address"
         @feedback="setFeedback"
-      ></form-input>
+      ></form-text-input>
     </div>
     <div>
-      <form-input
+      <form-text-input
         label="City"
         required
         type="text"
         maxlength="15"
         v-model="city"
         @feedback="setFeedback"
-      ></form-input>
+      ></form-text-input>
     </div>
     <div>
-      <form-input
+      <form-text-input
         label="Region"
         required
         type="text"
         maxlength="15"
         v-model="region"
         @feedback="setFeedback"
-      ></form-input>
+      ></form-text-input>
     </div>
     <div>
-      <form-input
+      <form-text-input
         label="Postal Code"
         required
         type="text"
         maxlength="10"
         v-model="postal_code"
         @feedback="setFeedback"
-      ></form-input>
+      ></form-text-input>
     </div>
     <div>
-      <country-select
+      <country-select-input
         v-model="country"
         required
         maxlength="15"
         @feedback="setFeedback"
-      ></country-select>
+      ></country-select-input>
     </div>
     <div>
-      <form-input
+      <form-text-input
         label="Phone"
         required
         type="text"
         v-model="home_phone"
         @feedback="setFeedback"
-      ></form-input>
+      ></form-text-input>
     </div>
   </div>
 </template>
 
 <script>
-import CountrySelect from '~/components/CountrySelect';
-import FormInput from '~/components/FormInput';
+import CountrySelectInput from '~/components/CountrySelectInput';
+import FormTextInput from '~/components/FormTextInput';
 
 export default {
   feedbacks: [],
   components: {
-    CountrySelect,
-    FormInput
+    CountrySelectInput,
+    FormTextInput
   },
   initFields() {
     const fields = [

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import EmployeeForm from '~/components/forms/EmployeeForm';
+import EmployeeForm from '~/components/employee/forms/EmployeeForm';
 export default {
   components: {
     EmployeeForm
