@@ -45,7 +45,7 @@
             >
               View
             </b-button>
-            <b-button variant="danger">
+            <b-button variant="danger" @click="remove(data.item.employee_id)">
               Delete
             </b-button>
           </template>
@@ -83,7 +83,7 @@ export default {
     { key: 'employee_id', label: '#', sortable: true },
     { key: 'first_name', label: 'First name', sortable: true },
     { key: 'last_name', label: 'Last name', sortable: true },
-    { key: 'actions', label: '' },
+    { key: 'actions', label: 'Actions' }
   ],
   props: {
     showOnLoad: {
@@ -96,7 +96,6 @@ export default {
     return {
       first_name: '',
       last_name: '',
-
       fields: this.$options.columns,
       items: [],
       itemCount: 0,
@@ -129,19 +128,21 @@ export default {
           };
           return acc;
         }, {});
-      console.log(_where);
       return _where;
     }
   },
 
   methods: {
+    async remove(employeeId) {
+      await this.$store.dispatch('employee/remove', employeeId);
+      await this.search();
+    },
     async sortingChanged({ sortBy, sortDesc }) {
       this.order_by = { [sortBy]: sortDesc ? 'asc' : 'desc' };
       await this.search();
     },
     async search() {
       this.isBusy = true;
-      //await new Promise(resolve => setTimeout(resolve, 1500));
       const query = `query ($offset : Int, $limit: Int, $where: employees_bool_exp! $order_by :[employees_order_by!]) {
                     employees_aggregate(where: $where) {
                       aggregate {

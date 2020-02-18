@@ -1,6 +1,5 @@
-import Vue from 'vue';
-export default async ({ app: { $axios } }) => {
-  Vue.prototype.$hasura = async (query, variables) => {
-    return await $axios.$post('/gql', { query, variables });
-  };
+export default async ({ app }, inject) => {
+  inject('hasura', async (query, variables) => {
+    return await app.$axios.$post('/gql', { query, variables });
+  });
 };

@@ -1,6 +1,15 @@
 <template>
   <div>
     <div>
+      <employee-name-select-input
+        label="Reports To"
+        required
+        v-model="reports_to_employee.name"
+        @selected="setReportsTo"
+        @feedback="setFeedback"
+      ></employee-name-select-input>
+    </div>
+    <div>
       <form-input
         label="First Name"
         required
@@ -70,16 +79,6 @@
         @feedback="setFeedback"
       ></form-input>
     </div>
-    <div>
-      <form-input
-        label="Reports To"
-        required
-        type="number"
-        max="32000"
-        v-model="reports_to"
-        @feedback="setFeedback"
-      ></form-input>
-    </div>
     <b-button @click="this.save" block :disabled="this.feedbacks"
       >Save</b-button
     >
@@ -90,8 +89,9 @@
 import ContactForm from '~/components/forms/ContactForm';
 import SelectInput from '~/components/SelectInput';
 import FormInput from '~/components/FormInput';
+import EmployeeNameSelectInput from '~/components/EmployeeNameSelectInput';
 export default {
-  components: { FormInput, ContactForm, SelectInput },
+  components: { FormInput, ContactForm, SelectInput, EmployeeNameSelectInput },
   feedbacks: [],
   initFields() {
     const fields = [
@@ -110,7 +110,9 @@ export default {
       'last_name',
       'first_name',
       'title',
-      'title_of_courtesy'
+      'title_of_courtesy',
+      'reports_to',
+      'reports_to_employee'
     ];
     return fields.reduce((acc, field) => {
       acc[field] = '';
@@ -126,7 +128,10 @@ export default {
     }
   },
   data() {
-    const data = { ...this.$options.initFields(), ...this.value };
+    const data = {
+      ...this.$options.initFields(),
+      ...this.value
+    };
     const contact = this.$_.pick(data, [
       'address',
       'city',
@@ -142,6 +147,10 @@ export default {
     };
   },
   methods: {
+    setReportsTo({ employee_id = 0 }) {
+      this.reports_to = employee_id;
+      console.log('setReportsTo');
+    },
     setFeedback({ key, message }) {
       this.$options.feedbacks = this.$options.feedbacks.filter(
         p => p.key != key
@@ -154,7 +163,8 @@ export default {
     getData() {
       return this.$_.omit(JSON.parse(JSON.stringify(this._data)), [
         'feedbacks',
-        'contact'
+        'contact',
+        'reports_to_employee'
       ]);
     },
     async save() {

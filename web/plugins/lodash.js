@@ -1,4 +1,5 @@
-import Vue from 'vue';
 import * as _ from 'lodash';
 
-Vue.prototype.$_ = _;
+export default async ({ app }, inject) => {
+  inject('_', _);
+};
