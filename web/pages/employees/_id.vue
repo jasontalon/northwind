@@ -31,7 +31,7 @@ export default {
       const query = `query { employees(where: {employee_id: {_eq: ${employeeId}}}) { address birth_date city country employee_id first_name hire_date home_phone last_name notes postal_code region reports_to title title_of_courtesy } }`;
 
       const employee = this.$_.get(
-        await this.$axios.$post('/gql', { query }),
+        await this.$hasura(query),
         'data.employees[0]',
         {}
       );

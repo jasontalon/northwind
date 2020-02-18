@@ -80,10 +80,10 @@ import FormInput from '~/components/FormInput';
 export default {
   components: { FormInput },
   columns: [
-    { key: 'actions', label: '' },
     { key: 'employee_id', label: '#', sortable: true },
     { key: 'first_name', label: 'First name', sortable: true },
-    { key: 'last_name', label: 'Last name', sortable: true }
+    { key: 'last_name', label: 'Last name', sortable: true },
+    { key: 'actions', label: '' },
   ],
   props: {
     showOnLoad: {
