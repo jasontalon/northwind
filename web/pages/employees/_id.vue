@@ -1,5 +1,9 @@
 <template>
-  <employee-form v-model="employee" @save="save"></employee-form>
+  <employee-form
+    :key="employee.employee_id"
+    v-model="employee"
+    @save="save"
+  ></employee-form>
 </template>
 
 <script>
@@ -11,7 +15,7 @@ export default {
   data() {
     return {
       feedbacks: [],
-      employee: { first_name: '' }
+      employee: {}
     };
   },
   validate({ params }) {
@@ -22,52 +26,20 @@ export default {
   async mounted() {
     await this.load(this.$route.params.id);
   },
-  watch: {
-    employee(val) {
-      console.log(val);
-    }
-  },
-
   methods: {
     async load(employeeId) {
-      const query = `query  {
-  employees(where: {employee_id: {_eq: ${employeeId}}}) {
-    address
-    birth_date
-    city
-    country
-    createdBy
-    employee_id
-    first_name
-    hire_date
-    home_phone
-    last_name
-    notes
-    postal_code
-    region
-    reports_to
-    title
-    title_of_courtesy
-  }
-}
-`;
-      const {
-        data: { employees }
-      } = await this.$axios.$post('/gql', { query });
+      const query = `query { employees(where: {employee_id: {_eq: ${employeeId}}}) { address birth_date city country employee_id first_name hire_date home_phone last_name notes postal_code region reports_to title title_of_courtesy } }`;
 
-      const employee = employees[0];
-      const _ = this.$_;
-      const employeeProps = _.keys(employee);
-      for (let i = 0; employeeProps.length > i; i++) {
-        const propName = employeeProps[i];
-        this.employee[propName] = employee[propName];
-        //this.$set(this.employee, propName, employee[propName]);
-      }
+      const employee = this.$_.get(
+        await this.$axios.$post('/gql', { query }),
+        'data.employees[0]',
+        {}
+      );
+
+      this.employee = employee;
     },
     async save(employee) {
-      const _emp = this.$_.omit(this.employee, ['employee_id']);
-      console.log(_emp);
-      await this.$store.dispatch('employee/save', _emp);
+      await this.$store.dispatch('employee/save', this.employee);
     }
   }
 };

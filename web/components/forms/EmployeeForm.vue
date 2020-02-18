@@ -127,7 +127,7 @@ export default {
   },
   data() {
     const data = { ...this.$options.initFields(), ...this.value };
-  console.log(data);
+    console.log(data);
     const contact = this.$_.pick(data, [
       'address',
       'city',
@@ -165,8 +165,7 @@ export default {
     },
     async save() {
       const employee = { ...this.getData(), ...this.$data.contact };
-      console.log(employee);
-      this.$emit('save', this.getData());
+      this.$emit('save', employee);
     }
   },
   mounted() {

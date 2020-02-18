@@ -24,7 +24,6 @@ export default {
       );
 
       const record = this.$_.omit(employee, ['employee_id']);
-
       record.employee_id = latestEmployeeId + 1;
 
       await this.$store.dispatch('employee/save', record);
