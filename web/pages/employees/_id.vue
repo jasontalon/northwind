@@ -40,6 +40,7 @@ export default {
     },
     async save(employee) {
       await this.$store.dispatch('employee/save', this.employee);
+      this.$router.push('/employees');
     }
   }
 };

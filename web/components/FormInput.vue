@@ -28,7 +28,7 @@ export default {
     type: { type: String, default: '' },
     label: { type: String, default: '' },
     required: { type: Boolean, default: false },
-    value: { type: String },
+    value: { type: String | Number },
     readonly: { type: Boolean, default: false },
     description: { type: String, default: '' },
     minlength: String,
@@ -48,7 +48,7 @@ export default {
     feedback() {
       let feedback = '';
       if (!this.required || this.readonly) feedback = '';
-      else if (this.value.length == 0) feedback = `${this.label} is required.`;
+      else if (this.value?.length == 0) feedback = `${this.label} is required.`;
       else if (
         this.type == 'number' &&
         parseInt(this.value) > parseInt(this.max)
@@ -58,9 +58,6 @@ export default {
       this.$emit('feedback', { label: this.label || '', message: feedback });
       return feedback;
     }
-  },
-  mounted() {
-    this.$el;
   }
 };
 </script>

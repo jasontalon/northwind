@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Employees</h1>
-    <employee-lookup-form></employee-lookup-form>
+    <employee-lookup-form show-on-load></employee-lookup-form>
   </div>
 </template>
 

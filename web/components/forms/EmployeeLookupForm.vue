@@ -39,8 +39,14 @@
           :busy.sync="isBusy"
         >
           <template v-slot:cell(actions)="data">
-            <b-button :to="'/employees/' + data.item.employee_id">
+            <b-button
+              variant="link"
+              :to="'/employees/' + data.item.employee_id"
+            >
               View
+            </b-button>
+            <b-button variant="danger">
+              Delete
             </b-button>
           </template>
         </b-table></b-row
@@ -79,6 +85,12 @@ export default {
     { key: 'first_name', label: 'First name', sortable: true },
     { key: 'last_name', label: 'Last name', sortable: true }
   ],
+  props: {
+    showOnLoad: {
+      type: Boolean,
+      default: false
+    }
+  },
 
   data() {
     return {
@@ -158,16 +170,15 @@ export default {
           employees_aggregate: { aggregate: { count = 0 } = {} } = {}
         } = {},
         errors = null
-      } = await this.$axios.$post('/gql', {
-        query,
-        variables
-      });
+      } = await this.$hasura(query, variables);
 
       this.items = employees;
       this.itemCount = count;
       this.isBusy = false;
     }
   },
-  mounted() {}
+  mounted() {
+    if (this.$props.showOnLoad) this.search();
+  }
 };
 </script>

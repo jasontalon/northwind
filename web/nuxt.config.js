@@ -34,7 +34,8 @@ export default {
     '~/plugins/axios.client.js',
     '~/plugins/auth.client.js',
     '~/plugins/shortid.js',
-    '~/plugins/lodash.js'
+    '~/plugins/lodash.js',
+    '~/plugins/hasura.js'
   ],
   /*
    ** Nuxt.js dev-modules

@@ -12,10 +12,9 @@ export default {
   },
   methods: {
     async save(employee) {
-      const response = await this.$axios.$post('/gql', {
-        query:
-          'query { employees(limit: 1, order_by: {employee_id: desc}) { employee_id } }'
-      });
+      const response = await this.$hasura(
+        'query { employees(limit: 1, order_by: {employee_id: desc}) { employee_id } }'
+      );
 
       const latestEmployeeId = this.$_.get(
         response,
@@ -23,10 +22,10 @@ export default {
         0
       );
 
-      const record = this.$_.omit(employee, ['employee_id']);
-      record.employee_id = latestEmployeeId + 1;
+      const record = { ...employee, employee_id: latestEmployeeId + 1 };
 
       await this.$store.dispatch('employee/save', record);
+      this.$router.push('/employees');
     }
   }
 };
