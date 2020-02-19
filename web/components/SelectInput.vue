@@ -41,9 +41,10 @@ export default {
   computed: {
     feedback() {
       let feedback = '';
+      const value = this.$_.isNull(this.value) ? '' : this.value; 
       if (!this.required || this.readonly) feedback = '';
-      else if (this.value.length == 0) feedback = `${this.label} is required.`;
-      else if (!this.selections.includes(this.value))
+      else if (value.length == 0) feedback = `${this.label} is required.`;
+      else if (!this.selections.includes(value))
         feedback = `Invalid ${this.label}.`;
       this.$emit('feedback', { key: this.label || '', message: feedback });
       return feedback;

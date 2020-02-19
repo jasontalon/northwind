@@ -53,7 +53,7 @@
         label="Phone"
         required
         type="text"
-        v-model="home_phone"
+        v-model="phone"
         @feedback="setFeedback"
       ></form-text-input>
     </div>
@@ -70,14 +70,14 @@ export default {
     CountrySelectInput,
     FormTextInput
   },
-  initFields() {
+  fields() {
     const fields = [
       'address',
       'city',
       'region',
       'postal_code',
       'country',
-      'home_phone'
+      'phone'
     ];
     return fields.reduce((acc, field) => {
       acc[field] = '';
@@ -88,14 +88,14 @@ export default {
     value: {
       type: Object,
       default: function() {
-        return this.$options.initFields();
+        return this.$options.fields();
       }
     }
   },
   data() {
     const data = _.pick(
-      { ...this.$options.initFields(), ...this.value },
-      this.$_.keys(this.$options.initFields())
+      { ...this.$options.fields(), ...this.value },
+      this.$_.keys(this.$options.fields())
     );
     return data;
   },

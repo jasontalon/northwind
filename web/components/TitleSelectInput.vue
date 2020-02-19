@@ -11,17 +11,14 @@
       type="text"
       :list="this.selectionId"
       v-model="searchTerm"
+      :required="this.required"
       :state="this.feedback.length == 0"
       debounce="500"
     ></b-form-input>
 
     <datalist :id="this.selectionId">
-      <option
-        class="d-block"
-        v-for="{ employee_id, name } in results"
-        :key="employee_id"
-      >
-        {{ name }}
+      <option class="d-block" v-for="(title, index) in results" :key="index">
+        {{ title }}
       </option>
     </datalist>
   </b-form-group>
@@ -31,7 +28,7 @@
 export default {
   props: {
     description: { type: String, default: '' },
-    label: { type: String, default: 'Employee' },
+    label: { type: String, default: 'Title' },
     required: { type: Boolean, default: false },
     readonly: { type: Boolean, default: false },
     value: {
@@ -44,18 +41,19 @@ export default {
       results: [],
       selectionId: this.$shortid(),
       textId: this.$shortid(),
-      searchTerm: this.value || '',
-      selectedEmployee: {}
+      searchTerm: this.value,
+      selectedTitle: ''
     };
   },
   watch: {
     async searchTerm(val) {
-      this.selectedEmployee = JSON.parse(JSON.stringify(this.results)).find(
-        p => p.name == this.searchTerm
-      );
-
-      this.$emit('selected', this.selectedEmployee || {});
-      if (!this.selectedEmployee) await this.search();
+      const hasExactMatch =
+        JSON.parse(JSON.stringify(this.results)).filter(
+          p => p == this.searchTerm
+        ).length > 0;
+      this.$emit('input', this.searchTerm);
+      
+      if (!hasExactMatch && this.searchTerm.length > 3) await this.search();
     }
   },
   computed: {
@@ -63,29 +61,27 @@ export default {
       let feedback = '';
       if (!this.required || this.readonly) feedback = '';
       else if (!this.searchTerm) feedback = `${this.label} is required.`;
-      else if (!this.selectedEmployee) feedback = `Invalid ${this.label}`;
 
-      this.$emit('feedback', { key: this.label || '', message: feedback });
+      this.$emit('feedback', { label: this.label || '', message: feedback });
       return feedback;
     }
   },
   methods: {
     async search() {
-      const query = `query ($search: String) { employees(limit: 10 where: {_or: [{first_name: {_ilike: $search}}, {last_name: {_ilike: $search}}]}) { employee_id first_name last_name }}`,
+      const query = `query ($search: String) { customers(limit: 10, distinct_on: contact_title, where: {contact_title: {_ilike: $search}}) { contact_title } employees(limit: 10, distinct_on:title, where : {title :{_ilike:$search}}) { title } }`,
         variables = {
           search: `%${this.searchTerm}%`
         };
 
-      const employees = this.$_.get(
-        await this.$hasura(query, variables),
-        'data.employees',
-        []
-      ).map(e => ({
-        ...e,
-        name: e.first_name + ' ' + e.last_name
-      }));
+      const {
+        data: { customers = [], employees = [] }
+      } = await this.$hasura(query, variables);
 
-      this.results = employees;
+      const titles = this.$_.uniq([
+        ...customers.map(c => c.contact_title),
+        ...employees.map(e => e.title)
+      ]).sort();
+      this.results = titles;
     }
   }
 };

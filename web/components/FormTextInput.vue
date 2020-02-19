@@ -1,13 +1,13 @@
 <template>
   <b-form-group
     :label="this.label"
-    :readonly="this.readonly"
     :invalid-feedback="this.feedback"
     :state="this.feedback.length == 0"
     :description="this.description"
     :label-for="this.textId"
   >
     <b-form-input
+      :readonly="this.readonly"
       :id="this.textId"
       :value="this.value"
       @input="value => $emit('input', value)"
@@ -31,8 +31,8 @@ export default {
     value: { type: String | Number },
     readonly: { type: Boolean, default: false },
     description: { type: String, default: '' },
-    minlength: String,
-    maxlength: String,
+    minlength: { type: String, default: '' },
+    maxlength: { type: String, default: '' },
     min: String,
     max: String,
     regex: String
@@ -47,13 +47,20 @@ export default {
   computed: {
     feedback() {
       let feedback = '';
+      const value = this.$_.isNull(this.value) ? '' : this.value; 
       if (!this.required || this.readonly) feedback = '';
-      else if (this.value?.length == 0) feedback = `${this.label} is required.`;
+      else if (value.length == 0) feedback = `${this.label} is required.`;
       else if (
         this.type == 'number' &&
-        parseInt(this.value) > parseInt(this.max)
+        parseInt(value) > parseInt(this.max)
       )
         feedback = 'Max number reached.';
+      else if (
+        this.minlength.length > 0 &&
+        parseInt(this.minlength) > value.length
+      ) {
+        feedback = 'Min length!';
+      }
       //make regex validations
       this.$emit('feedback', { label: this.label || '', message: feedback });
       return feedback;

@@ -11,14 +11,13 @@
         ></form-text-input>
       </b-col>
       <b-col md="5">
-        <form-text-input
+        <title-select-input
           label="Job Title"
           required
-          type="text"
           maxlength="30"
           v-model="title"
           @feedback="setFeedback"
-        ></form-text-input
+        ></title-select-input
       ></b-col>
       <b-col md="4"
         ><employee-name-select-input
@@ -86,7 +85,7 @@
         <b-form-row>
           <b-col>
             <contact-form
-              v-model="contact"
+              v-model="address"
               @feedbacks="value => value.forEach(setFeedback)"
             ></contact-form
           ></b-col>
@@ -105,28 +104,36 @@ import SelectInput from '~/components/SelectInput';
 import FormTextInput from '~/components/FormTextInput';
 import FormTextAreaInput from '~/components/FormTextAreaInput';
 import EmployeeNameSelectInput from '~/components/employee/EmployeeNameSelectInput';
+import TitleSelectInput from '~/components/TitleSelectInput';
 export default {
   components: {
     FormTextAreaInput,
     FormTextInput,
     ContactForm,
     SelectInput,
-    EmployeeNameSelectInput
+    EmployeeNameSelectInput,
+    TitleSelectInput
   },
   feedbacks: [],
-  initFields() {
-    const fields = [
-      'hire_date',
-      'reports_to',
-      'birth_date',
-      'employee_id',
+  address() {
+    return [
       'address',
       'city',
       'region',
       'postal_code',
       'country',
-      'home_phone',
-      'extension',
+      'home_phone'
+    ].reduce((acc, field) => {
+      acc[field] = '';
+      return acc;
+    }, {});
+  },
+  employee() {
+    return [
+      'hire_date',
+      'reports_to',
+      'birth_date',
+      'employee_id',
       'notes',
       'last_name',
       'first_name',
@@ -134,8 +141,7 @@ export default {
       'title_of_courtesy',
       'reports_to',
       'reports_to_employee'
-    ];
-    return fields.reduce((acc, field) => {
+    ].reduce((acc, field) => {
       acc[field] = '';
       return acc;
     }, {});
@@ -144,26 +150,22 @@ export default {
     value: {
       type: Object,
       default: function() {
-        return this.$options.initFields();
+        return { ...this.$options.employee(), ...this.$options.address() };
       }
     }
   },
   data() {
-    const data = {
-      ...this.$options.initFields(),
-      ...this.value
-    };
-    const contact = this.$_.pick(data, [
-      'address',
-      'city',
-      'region',
-      'postal_code',
-      'country',
-      'home_phone'
-    ]);
+    const _ = this.$_;
+
+    const value = _.isEmpty(this.value)
+        ? { ...this.$options.employee(), ...this.$options.address() }
+        : this.value,
+      employee = _.pick(value, _.keys(this.$options.employee())),
+      address = _.pick(value, _.keys(this.$options.address()));
+
     return {
-      ...data,
-      contact,
+      ...employee,
+      address: { ...address, phone: address.home_phone },
       feedbacks: false
     };
   },
@@ -181,21 +183,26 @@ export default {
       this.$emit('update:feedbacks', this.$options.feedbacks);
     },
     getData() {
-      return this.$_.omit(JSON.parse(JSON.stringify(this._data)), [
-        'feedbacks',
-        'contact',
+      const _ = this.$_;
+      const data = _.omit(JSON.parse(JSON.stringify(this.$data)), [
         'reports_to_employee'
       ]);
+      const parsedData = {
+        ..._.pick(data, _.keys(this.$options.employee())),
+        ..._.pick(data.address, _.keys(this.$options.address())),
+        home_phone: data.address.phone
+      };
+
+      return _.omit(parsedData, ['phone']);
     },
     async save() {
-      const employee = { ...this.getData(), ...this.$data.contact };
-      this.$emit('save', employee);
+      console.log(this.getData());
+      this.$emit('save', this.getData());
     }
   },
   mounted() {
     this.$watch(
-      vm =>
-        [...vm.$_.values(vm.$data), ...vm.$_.values(vm.$data.contact)].join(),
+      vm => this.$_.values(this.getData()).join(),
       val => this.$emit('input', this.getData())
     );
   }
