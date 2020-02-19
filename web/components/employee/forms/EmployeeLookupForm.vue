@@ -116,9 +116,8 @@ export default {
         return {
           employee_id: { _gt: 0 }
         };
-      const _ = this.$_;
-
-      const filters = _.pick(JSON.parse(JSON.stringify(this.$data)), [
+      const _ = this.$_,
+        filters = _.pick(JSON.parse(JSON.stringify(this.$data)), [
           'first_name',
           'last_name'
         ]),

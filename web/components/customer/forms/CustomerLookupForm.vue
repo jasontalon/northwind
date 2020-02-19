@@ -128,7 +128,6 @@ export default {
           };
           return acc;
         }, {});
-      console.log(_where);
       return _where;
     }
   },
@@ -165,7 +164,7 @@ export default {
           limit: this.perPage,
           offset: (this.currentPage - 1) * this.perPage
         };
-      console.log(variables);
+
       const {
         data: {
           customers = [],

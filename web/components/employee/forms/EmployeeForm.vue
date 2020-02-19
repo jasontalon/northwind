@@ -155,9 +155,8 @@ export default {
     }
   },
   data() {
-    const _ = this.$_;
-
-    const value = _.isEmpty(this.value)
+    const _ = this.$_,
+      value = _.isEmpty(this.value)
         ? { ...this.$options.employee(), ...this.$options.address() }
         : this.value,
       employee = _.pick(value, _.keys(this.$options.employee())),
@@ -183,20 +182,19 @@ export default {
       this.$emit('update:feedbacks', this.$options.feedbacks);
     },
     getData() {
-      const _ = this.$_;
-      const data = _.omit(JSON.parse(JSON.stringify(this.$data)), [
-        'reports_to_employee'
-      ]);
-      const parsedData = {
-        ..._.pick(data, _.keys(this.$options.employee())),
-        ..._.pick(data.address, _.keys(this.$options.address())),
-        home_phone: data.address.phone
-      };
+      const _ = this.$_,
+        data = _.omit(JSON.parse(JSON.stringify(this.$data)), [
+          'reports_to_employee'
+        ]),
+        parsedData = {
+          ..._.pick(data, _.keys(this.$options.employee())),
+          ..._.pick(data.address, _.keys(this.$options.address())),
+          home_phone: data.address.phone
+        };
 
       return _.omit(parsedData, ['phone']);
     },
     async save() {
-      console.log(this.getData());
       this.$emit('save', this.getData());
     }
   },
