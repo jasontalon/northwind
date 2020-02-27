@@ -25,7 +25,7 @@
 <script>
 export default {
   props: {
-    type: { type: String, default: '' },
+    type: { type: String, default: 'text' },
     label: { type: String, default: '' },
     required: { type: Boolean, default: false },
     value: { type: String | Number },
@@ -47,13 +47,15 @@ export default {
   computed: {
     feedback() {
       let feedback = '';
-      const value = this.$_.isNull(this.value) ? '' : this.value; 
+      const value =
+        this.$_.isNull(this.value) || _.isUndefined(this.value)
+          ? ''
+          : this.value;
+
+      console.log(value);
       if (!this.required || this.readonly) feedback = '';
       else if (value.length == 0) feedback = `${this.label} is required.`;
-      else if (
-        this.type == 'number' &&
-        parseInt(value) > parseInt(this.max)
-      )
+      else if (this.type == 'number' && parseInt(value) > parseInt(this.max))
         feedback = 'Max number reached.';
       else if (
         this.minlength.length > 0 &&
