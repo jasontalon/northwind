@@ -48,11 +48,9 @@ export default {
     feedback() {
       let feedback = '';
       const value =
-        this.$_.isNull(this.value) || _.isUndefined(this.value)
+        this.$_.isNull(this.value) || this.$_.isUndefined(this.value)
           ? ''
           : this.value;
-
-      console.log(value);
       if (!this.required || this.readonly) feedback = '';
       else if (value.length == 0) feedback = `${this.label} is required.`;
       else if (this.type == 'number' && parseInt(value) > parseInt(this.max))
@@ -63,7 +61,6 @@ export default {
       ) {
         feedback = 'Min length!';
       }
-      //make regex validations
       this.$emit('feedback', { label: this.label || '', message: feedback });
       return feedback;
     }
