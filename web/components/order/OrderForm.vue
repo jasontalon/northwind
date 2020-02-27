@@ -1,14 +1,14 @@
 <template>
   <div>
     <b-row
-      ><b-col md="12">
+      ><b-col md="6">
         <customer-name-select-input
           label="Customer"
           required
           v-model="customer.company_name"
         ></customer-name-select-input>
       </b-col>
-      <b-col md="12">
+      <b-col md="6">
         <employee-name-select-input
           label="Sales Person"
           required
@@ -47,7 +47,10 @@
     ></b-row>
     <b-row>
       <b-col> <contact-form></contact-form></b-col
-    ></b-row></div
+    ></b-row>
+    <b-row>
+      <order-details></order-details>
+    </b-row></div
 ></template>
 
 <script>
@@ -56,13 +59,15 @@ import CustomerNameSelectInput from '~/components/customer/CustomerNameSelectInp
 import EmployeeNameSelectInput from '~/components/employee/EmployeeNameSelectInput';
 import ShipperNameSelectInput from '~/components/order/ShipperNameSelectInput';
 import ContactForm from '~/components/forms/ContactForm';
+import OrderDetails from '~/components/order/OrderDetails';
 export default {
   components: {
     CustomerNameSelectInput,
     EmployeeNameSelectInput,
     ContactForm,
     FormTextInput,
-    ShipperNameSelectInput
+    ShipperNameSelectInput,
+    OrderDetails
   },
   data() {
     return {
