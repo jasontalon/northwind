@@ -51,7 +51,7 @@ export default {
   watch: {
     async searchTerm(val) {
       this.selectedCustomer = JSON.parse(JSON.stringify(this.results)).find(
-        p => p.name == this.searchTerm
+        p => p.company_name == this.searchTerm
       );
 
       this.$emit('selected', this.selectedCustomer || {});
