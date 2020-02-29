@@ -28,6 +28,7 @@
     "@nestjs/passport": "^6.1.1",
     "@nestjs/platform-express": "^6.10.14",
     "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
     "graphql-tag": "^2.10.1",
     "moment": "^2.24.0",
     "passport": "^0.4.1",

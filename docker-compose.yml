@@ -1,50 +1,53 @@
-version: '3'
-services:  
+version: "3"
+services:
   pgadmin:
     image: dpage/pgadmin4:latest
     restart: always
     ports:
-    - "5431:5050"
-    depends_on:  
-    - "postgres"
-    environment: 
-      PGADMIN_DEFAULT_EMAIL: admin@postgres.com
-      PGADMIN_DEFAULT_PASSWORD: password
-      PGADMIN_LISTEN_PORT: 5050
+      - ${PGADMIN_LISTEN_PORT}
+    depends_on:
+      - "postgres"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
   postgres:
     image: postgres:12-alpine
     restart: always
     volumes:
-    - db_data:/var/lib/postgresql/data
-    - backups:/backups
+      - db_data:/var/lib/postgresql/data
+      - backups:/backups
     ports:
-    - "5432:5432"
+      - "5432"
+    environment: 
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   graphql-engine:
     image: hasura/graphql-engine:latest
     ports:
-    - "5433:8080"
+      - "5433:8080"
     depends_on:
-    - "postgres"
+      - "postgres"
     restart: always
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" 
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log      
-      HASURA_GRAPHQL_ADMIN_SECRET: password
-      HASURA_GRAPHQL_AUTH_HOOK : http://api:3005/auth/hasura
-      HASURA_GRAPHQL_AUTH_HOOK_MODE : GET
+      HASURA_GRAPHQL_DATABASE_URL: ${HASURA_GRAPHQL_DATABASE_URL}
+      HASURA_GRAPHQL_ENABLE_CONSOLE: ${HASURA_GRAPHQL_ENABLE_CONSOLE}
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: ${HASURA_GRAPHQL_ENABLED_LOG_TYPES}
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_AUTH_HOOK: ${HASURA_GRAPHQL_AUTH_HOOK}
+      HASURA_GRAPHQL_AUTH_HOOK_MODE: ${HASURA_GRAPHQL_AUTH_HOOK_MODE}
   api:
     build: ./api
     ports:
-    - "5434:3005"
-    - "5439:9229" #debugging
+      - "5434:${API_PORT}"
+      - "5439:9229" #debugging
     volumes:
-    - ./api/dist:/api/dist
+      - ./api/dist:/api/dist
     restart: unless-stopped
     environment:
-      GQL_URL: http://graphql-engine:8080/v1/graphql
-      GQL_SECRET: password
-      JWT_SECRET: password
+      GQL_URL: ${API_GQL_URL}
+      GQL_SECRET: ${API_GQL_SECRET}
+      JWT_SECRET: ${API_JWT_SECRET}
+      PORT: ${API_PORT}
     command: ["npm", "run", "docker:debug"] #debug mode
 volumes:
   db_data:

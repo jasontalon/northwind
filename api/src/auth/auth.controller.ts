@@ -102,7 +102,7 @@ export class AuthController {
     return {
       path: '/api/auth/token',
       httpOnly: true,
-      maxAge: 86400000, //1 day
+      maxAge: 86400000 * 30, //30 days
     };
   }
 
