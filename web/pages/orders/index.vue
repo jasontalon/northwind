@@ -1,15 +1,15 @@
 <template>
   <div>
     <h1>Orders</h1>
-    <order-form></order-form>
+    <order-lookup-form></order-lookup-form>
   </div>
 </template>
 
 <script>
-import OrderForm from '~/components/order/OrderForm';
+import OrderLookupForm from '~/components/order/OrderLookupForm';
 export default {
   components: {
-    OrderForm
+    OrderLookupForm
   }
 };
 </script>
