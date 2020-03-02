@@ -178,7 +178,7 @@ export default {
           limit: this.perPage,
           offset: (this.currentPage - 1) * this.perPage
         };
-      console.log(query, variables);
+
       const {
         data: {
           orders = [],

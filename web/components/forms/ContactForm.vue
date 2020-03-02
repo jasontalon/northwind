@@ -23,7 +23,6 @@
     <div>
       <form-text-input
         label="Region"
-        required
         type="text"
         maxlength="15"
         v-model="region"
@@ -33,7 +32,6 @@
     <div>
       <form-text-input
         label="Postal Code"
-        required
         type="text"
         maxlength="10"
         v-model="postal_code"
@@ -48,7 +46,7 @@
         @feedback="setFeedback"
       ></country-select-input>
     </div>
-    <div>
+    <div v-if="!noPhone">
       <form-text-input
         label="Phone"
         required
@@ -85,6 +83,7 @@ export default {
     }, {});
   },
   props: {
+    noPhone: { type: Boolean, default: false },
     value: {
       type: Object,
       default: function() {
