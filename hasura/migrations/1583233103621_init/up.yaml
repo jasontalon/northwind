@@ -1,0 +1,750 @@
+- args:
+    tables:
+    - array_relationships:
+      - name: products
+        using:
+          foreign_key_constraint_on:
+            column: category_id
+            table:
+              name: products
+              schema: public
+      select_permissions:
+      - permission:
+          columns:
+          - category_id
+          - category_name
+          - description
+          - picture
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - category_id
+          - category_name
+          - description
+          - picture
+          filter: {}
+        role: user
+      table:
+        name: categories
+        schema: public
+    - object_relationships:
+      - name: customer
+        using:
+          foreign_key_constraint_on: customer_id
+      - name: customer_demographic
+        using:
+          foreign_key_constraint_on: customer_type_id
+      select_permissions:
+      - permission:
+          columns:
+          - customer_id
+          - customer_type_id
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - customer_id
+          - customer_type_id
+          filter: {}
+        role: user
+      table:
+        name: customer_customer_demo
+        schema: public
+    - array_relationships:
+      - name: customer_customer_demos
+        using:
+          foreign_key_constraint_on:
+            column: customer_type_id
+            table:
+              name: customer_customer_demo
+              schema: public
+      select_permissions:
+      - permission:
+          columns:
+          - customer_type_id
+          - customer_desc
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - customer_type_id
+          - customer_desc
+          filter: {}
+        role: user
+      table:
+        name: customer_demographics
+        schema: public
+    - array_relationships:
+      - name: customer_customer_demos
+        using:
+          foreign_key_constraint_on:
+            column: customer_id
+            table:
+              name: customer_customer_demo
+              schema: public
+      - name: orders
+        using:
+          foreign_key_constraint_on:
+            column: customer_id
+            table:
+              name: orders
+              schema: public
+      delete_permissions:
+      - permission:
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+      insert_permissions:
+      - permission:
+          check:
+            createdBy:
+              _eq: X-Hasura-User-Id
+          columns:
+          - address
+          - city
+          - company_name
+          - contact_name
+          - contact_title
+          - country
+          - customer_id
+          - fax
+          - phone
+          - postal_code
+          - region
+          set:
+            createdBy: x-hasura-User-Id
+        role: user
+      select_permissions:
+      - permission:
+          columns:
+          - customer_id
+          - company_name
+          - contact_name
+          - contact_title
+          - address
+          - city
+          - region
+          - postal_code
+          - country
+          - phone
+          - fax
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - customer_id
+          - company_name
+          - contact_name
+          - contact_title
+          - address
+          - city
+          - region
+          - postal_code
+          - country
+          - phone
+          - fax
+          - createdBy
+          filter: {}
+        role: user
+      table:
+        name: customers
+        schema: public
+      update_permissions:
+      - permission:
+          columns:
+          - address
+          - city
+          - company_name
+          - contact_name
+          - contact_title
+          - country
+          - customer_id
+          - fax
+          - phone
+          - postal_code
+          - region
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+    - object_relationships:
+      - name: employee
+        using:
+          foreign_key_constraint_on: employee_id
+      - name: territory
+        using:
+          foreign_key_constraint_on: territory_id
+      select_permissions:
+      - permission:
+          columns:
+          - employee_id
+          - territory_id
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - employee_id
+          - territory_id
+          filter: {}
+        role: user
+      table:
+        name: employee_territories
+        schema: public
+    - array_relationships:
+      - name: employee_territories
+        using:
+          foreign_key_constraint_on:
+            column: employee_id
+            table:
+              name: employee_territories
+              schema: public
+      - name: employees
+        using:
+          foreign_key_constraint_on:
+            column: reports_to
+            table:
+              name: employees
+              schema: public
+      - name: orders
+        using:
+          foreign_key_constraint_on:
+            column: employee_id
+            table:
+              name: orders
+              schema: public
+      delete_permissions:
+      - permission:
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+      insert_permissions:
+      - permission:
+          check:
+            createdBy:
+              _eq: X-Hasura-User-Id
+          columns:
+          - address
+          - birth_date
+          - city
+          - country
+          - employee_id
+          - extension
+          - first_name
+          - hire_date
+          - home_phone
+          - last_name
+          - notes
+          - photo
+          - photo_path
+          - postal_code
+          - region
+          - reports_to
+          - title
+          - title_of_courtesy
+          set:
+            createdBy: x-hasura-User-Id
+        role: user
+      object_relationships:
+      - name: employee
+        using:
+          foreign_key_constraint_on: reports_to
+      select_permissions:
+      - permission:
+          columns:
+          - employee_id
+          - last_name
+          - first_name
+          - title
+          - title_of_courtesy
+          - birth_date
+          - hire_date
+          - address
+          - city
+          - region
+          - postal_code
+          - country
+          - home_phone
+          - extension
+          - photo
+          - notes
+          - reports_to
+          - photo_path
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - address
+          - birth_date
+          - city
+          - country
+          - createdBy
+          - employee_id
+          - extension
+          - first_name
+          - hire_date
+          - home_phone
+          - last_name
+          - notes
+          - photo
+          - photo_path
+          - postal_code
+          - region
+          - reports_to
+          - title
+          - title_of_courtesy
+          filter: {}
+        role: user
+      table:
+        name: employees
+        schema: public
+      update_permissions:
+      - permission:
+          columns:
+          - address
+          - birth_date
+          - city
+          - country
+          - employee_id
+          - extension
+          - first_name
+          - hire_date
+          - home_phone
+          - last_name
+          - notes
+          - photo
+          - photo_path
+          - postal_code
+          - region
+          - reports_to
+          - title
+          - title_of_courtesy
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+    - delete_permissions:
+      - permission:
+          filter:
+            order:
+              createdBy:
+                _eq: X-Hasura-User-Id
+        role: user
+      insert_permissions:
+      - permission:
+          check:
+            order:
+              createdBy:
+                _eq: X-Hasura-User-Id
+          columns:
+          - order_id
+          - product_id
+          - unit_price
+          - quantity
+          - discount
+        role: user
+      object_relationships:
+      - name: order
+        using:
+          foreign_key_constraint_on: order_id
+      - name: product
+        using:
+          foreign_key_constraint_on: product_id
+      select_permissions:
+      - permission:
+          columns:
+          - order_id
+          - product_id
+          - unit_price
+          - quantity
+          - discount
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - order_id
+          - product_id
+          - unit_price
+          - quantity
+          - discount
+          filter: {}
+        role: user
+      table:
+        name: order_details
+        schema: public
+      update_permissions:
+      - permission:
+          columns:
+          - order_id
+          - product_id
+          - unit_price
+          - quantity
+          - discount
+          filter:
+            order:
+              createdBy:
+                _eq: X-Hasura-User-Id
+        role: user
+    - array_relationships:
+      - name: order_details
+        using:
+          foreign_key_constraint_on:
+            column: order_id
+            table:
+              name: order_details
+              schema: public
+      delete_permissions:
+      - permission:
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+      insert_permissions:
+      - permission:
+          check:
+            createdBy:
+              _eq: X-Hasura-User-Id
+          columns:
+          - customer_id
+          - employee_id
+          - freight
+          - order_date
+          - order_id
+          - required_date
+          - ship_address
+          - ship_city
+          - ship_country
+          - ship_name
+          - ship_postal_code
+          - ship_region
+          - ship_via
+          - shipped_date
+          set:
+            createdBy: x-hasura-User-Id
+        role: user
+      object_relationships:
+      - name: customer
+        using:
+          foreign_key_constraint_on: customer_id
+      - name: employee
+        using:
+          foreign_key_constraint_on: employee_id
+      - name: shipper
+        using:
+          foreign_key_constraint_on: ship_via
+      select_permissions:
+      - permission:
+          columns:
+          - order_id
+          - customer_id
+          - employee_id
+          - order_date
+          - required_date
+          - shipped_date
+          - ship_via
+          - freight
+          - ship_name
+          - ship_address
+          - ship_city
+          - ship_region
+          - ship_postal_code
+          - ship_country
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - createdBy
+          - customer_id
+          - employee_id
+          - freight
+          - order_date
+          - order_id
+          - required_date
+          - ship_address
+          - ship_city
+          - ship_country
+          - ship_name
+          - ship_postal_code
+          - ship_region
+          - ship_via
+          - shipped_date
+          filter: {}
+        role: user
+      table:
+        name: orders
+        schema: public
+      update_permissions:
+      - permission:
+          columns:
+          - customer_id
+          - employee_id
+          - freight
+          - order_date
+          - order_id
+          - required_date
+          - ship_address
+          - ship_city
+          - ship_country
+          - ship_name
+          - ship_postal_code
+          - ship_region
+          - ship_via
+          - shipped_date
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+    - array_relationships:
+      - name: order_details
+        using:
+          foreign_key_constraint_on:
+            column: product_id
+            table:
+              name: order_details
+              schema: public
+      delete_permissions:
+      - permission:
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+      insert_permissions:
+      - permission:
+          check: {}
+          columns:
+          - category_id
+          - discontinued
+          - product_id
+          - product_name
+          - quantity_per_unit
+          - reorder_level
+          - supplier_id
+          - unit_price
+          - units_in_stock
+          - units_on_order
+          set:
+            createdBy: x-hasura-User-Id
+        role: user
+      object_relationships:
+      - name: category
+        using:
+          foreign_key_constraint_on: category_id
+      - name: supplier
+        using:
+          foreign_key_constraint_on: supplier_id
+      select_permissions:
+      - permission:
+          columns:
+          - product_id
+          - product_name
+          - supplier_id
+          - category_id
+          - quantity_per_unit
+          - unit_price
+          - units_in_stock
+          - units_on_order
+          - reorder_level
+          - discontinued
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - product_id
+          - product_name
+          - supplier_id
+          - category_id
+          - quantity_per_unit
+          - unit_price
+          - units_in_stock
+          - units_on_order
+          - reorder_level
+          - discontinued
+          - createdBy
+          filter: {}
+        role: user
+      table:
+        name: products
+        schema: public
+      update_permissions:
+      - permission:
+          columns:
+          - category_id
+          - discontinued
+          - product_id
+          - product_name
+          - quantity_per_unit
+          - reorder_level
+          - supplier_id
+          - unit_price
+          - units_in_stock
+          - units_on_order
+          filter:
+            createdBy:
+              _eq: X-Hasura-User-Id
+        role: user
+    - array_relationships:
+      - name: territories
+        using:
+          foreign_key_constraint_on:
+            column: region_id
+            table:
+              name: territories
+              schema: public
+      select_permissions:
+      - permission:
+          columns:
+          - region_id
+          - region_description
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - region_id
+          - region_description
+          filter: {}
+        role: user
+      table:
+        name: region
+        schema: public
+    - array_relationships:
+      - name: orders
+        using:
+          foreign_key_constraint_on:
+            column: ship_via
+            table:
+              name: orders
+              schema: public
+      select_permissions:
+      - permission:
+          columns:
+          - shipper_id
+          - company_name
+          - phone
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - shipper_id
+          - company_name
+          - phone
+          filter: {}
+        role: user
+      table:
+        name: shippers
+        schema: public
+    - array_relationships:
+      - name: products
+        using:
+          foreign_key_constraint_on:
+            column: supplier_id
+            table:
+              name: products
+              schema: public
+      select_permissions:
+      - permission:
+          columns:
+          - supplier_id
+          - company_name
+          - contact_name
+          - contact_title
+          - address
+          - city
+          - region
+          - postal_code
+          - country
+          - phone
+          - fax
+          - homepage
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - supplier_id
+          - company_name
+          - contact_name
+          - contact_title
+          - address
+          - city
+          - region
+          - postal_code
+          - country
+          - phone
+          - fax
+          - homepage
+          filter: {}
+        role: user
+      table:
+        name: suppliers
+        schema: public
+    - array_relationships:
+      - name: employee_territories
+        using:
+          foreign_key_constraint_on:
+            column: territory_id
+            table:
+              name: employee_territories
+              schema: public
+      object_relationships:
+      - name: region
+        using:
+          foreign_key_constraint_on: region_id
+      select_permissions:
+      - permission:
+          columns:
+          - territory_id
+          - territory_description
+          - region_id
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - territory_id
+          - territory_description
+          - region_id
+          filter: {}
+        role: user
+      table:
+        name: territories
+        schema: public
+    - select_permissions:
+      - permission:
+          columns:
+          - state_id
+          - state_name
+          - state_abbr
+          - state_region
+          filter: {}
+        role: guest
+      - permission:
+          columns:
+          - state_id
+          - state_name
+          - state_abbr
+          - state_region
+          filter: {}
+        role: user
+      table:
+        name: us_states
+        schema: public
+    - object_relationships:
+      - name: user
+        using:
+          foreign_key_constraint_on: userId
+      table:
+        name: user_tokens
+        schema: public
+    - array_relationships:
+      - name: user_tokens
+        using:
+          foreign_key_constraint_on:
+            column: userId
+            table:
+              name: user_tokens
+              schema: public
+      table:
+        name: users
+        schema: public
+    version: 2
+  type: replace_metadata

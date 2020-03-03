@@ -18,10 +18,10 @@ export default {
   methods: {
     async onSave(order) {
       await this.$store.dispatch('order/save', order);
-      this.$router.push('/customers');
+      this.$router.push('/orders');
     },
     async load(orderId) {
-      const query = `query { orders(where: {order_id: {_eq: "${orderId}"}}) { customer { company_name } customer_id employee { first_name last_name } employee_id freight order_date order_details { order_id product_id quantity unit_price product { product_name quantity_per_unit } } order_id required_date ship_address ship_city ship_country ship_name ship_postal_code ship_region ship_via shipped_date shipper { company_name } } }`;
+      const query = `query { orders(where: {order_id: {_eq: "${orderId}"}}) { customer { company_name } customer_id employee { first_name last_name } employee_id freight order_date order_details { order_id product_id quantity unit_price product { product_name quantity_per_unit } discount } order_id required_date ship_address ship_city ship_country ship_name ship_postal_code ship_region ship_via shipped_date shipper { company_name } } }`;
 
       const order = this.$_.get(await this.$hasura(query), 'data.orders[0]');
       this.order = {
@@ -34,9 +34,7 @@ export default {
     }
   },
   async created() {
-    const orderId = this.$route.params.id;
-
-    await this.load(orderId);
+    await this.load(this.$route.params.id);
   }
 };
 </script>

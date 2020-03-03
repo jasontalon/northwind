@@ -1,7 +1,8 @@
 <template>
   <div>
     <h1>Orders</h1>
-    <order-lookup-form></order-lookup-form>
+    <b-button to="/orders/create">Create</b-button>
+    <order-lookup-form show-on-load></order-lookup-form>
   </div>
 </template>
 

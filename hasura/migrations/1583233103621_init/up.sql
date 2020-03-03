@@ -9,6 +9,20 @@ BEGIN
   RETURN _new;
 END;
 $$;
+CREATE TABLE public.categories (
+    category_id smallint NOT NULL,
+    category_name character varying(15) NOT NULL,
+    description text,
+    picture bytea
+);
+CREATE TABLE public.customer_customer_demo (
+    customer_id bpchar NOT NULL,
+    customer_type_id bpchar NOT NULL
+);
+CREATE TABLE public.customer_demographics (
+    customer_type_id bpchar NOT NULL,
+    customer_desc text
+);
 CREATE TABLE public.customers (
     customer_id bpchar NOT NULL,
     company_name character varying(40) NOT NULL,
@@ -22,6 +36,10 @@ CREATE TABLE public.customers (
     phone character varying(24),
     fax character varying(24),
     "createdBy" text
+);
+CREATE TABLE public.employee_territories (
+    employee_id smallint NOT NULL,
+    territory_id character varying(20) NOT NULL
 );
 CREATE TABLE public.employees (
     employee_id smallint NOT NULL,
@@ -81,31 +99,9 @@ CREATE TABLE public.products (
     discontinued integer NOT NULL,
     "createdBy" text
 );
-CREATE TABLE public.categories (
-    category_id smallint NOT NULL,
-    category_name character varying(15) NOT NULL,
-    description text,
-    picture bytea
-);
-CREATE TABLE public.customer_customer_demo (
-    customer_id bpchar NOT NULL,
-    customer_type_id bpchar NOT NULL
-);
-CREATE TABLE public.customer_demographics (
-    customer_type_id bpchar NOT NULL,
-    customer_desc text
-);
-CREATE TABLE public.employee_territories (
-    employee_id smallint NOT NULL,
-    territory_id character varying(20) NOT NULL
-);
 CREATE TABLE public.region (
     region_id smallint NOT NULL,
     region_description bpchar NOT NULL
-);
-CREATE TABLE public.roles (
-    "roleId" text NOT NULL,
-    level integer NOT NULL
 );
 CREATE TABLE public.shippers (
     shipper_id smallint NOT NULL,
@@ -153,6 +149,7 @@ CREATE TABLE public.users (
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     "lastLoginAt" date
 );
+
 
 --
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: -
@@ -3600,7 +3597,6 @@ INSERT INTO us_states VALUES (49, 'West Virginia', 'WV', 'south');
 INSERT INTO us_states VALUES (50, 'Wisconsin', 'WI', 'midwest');
 INSERT INTO us_states VALUES (51, 'Wyoming', 'WY', 'west');
 
-
 ALTER TABLE ONLY public.categories
     ADD CONSTRAINT pk_categories PRIMARY KEY (category_id);
 ALTER TABLE ONLY public.customer_customer_demo
@@ -3629,8 +3625,6 @@ ALTER TABLE ONLY public.territories
     ADD CONSTRAINT pk_territories PRIMARY KEY (territory_id);
 ALTER TABLE ONLY public.us_states
     ADD CONSTRAINT pk_usstates PRIMARY KEY (state_id);
-ALTER TABLE ONLY public.roles
-    ADD CONSTRAINT roles_pkey PRIMARY KEY ("roleId");
 ALTER TABLE ONLY public.user_tokens
     ADD CONSTRAINT user_tokens_pkey PRIMARY KEY ("userId", "refreshToken");
 ALTER TABLE ONLY public.users
@@ -3667,4 +3661,3 @@ ALTER TABLE ONLY public.territories
     ADD CONSTRAINT fk_territories_region FOREIGN KEY (region_id) REFERENCES public.region(region_id);
 ALTER TABLE ONLY public.user_tokens
     ADD CONSTRAINT "user_tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users("userId") ON UPDATE CASCADE ON DELETE CASCADE;
-

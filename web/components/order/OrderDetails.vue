@@ -32,9 +32,11 @@
       </template>
       <template v-slot:cell(discount)="data">
         <b-form-input
+          required
           style="max-width:140px;min-width:90px;"
           type="number"
           v-model="data.item.discount"
+          :state="data.item.discount != ''"
         ></b-form-input>
       </template>
       <template v-slot:cell(quantity)="data">
@@ -100,7 +102,7 @@ export default {
     items: {
       handler: function(val, oldVal) {
         const _ = this.$_;
-        const orderDetails = JSON.parse(JSON.stringify(this.items)).map(p =>
+        const orderDetails = this.items.map(p =>
           _.omit(p, ['quantity_per_unit', 'feedback', 'product_name', 'key'])
         );
         this.$emit('input', orderDetails);
@@ -121,6 +123,7 @@ export default {
       lineItem.product = productDetails;
       lineItem.unit_price = productDetails.unit_price;
       lineItem.quantity = 0;
+      lineItem.discount = 0;
     },
     add() {},
     remove(key) {
