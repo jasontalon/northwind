@@ -151,6 +151,7 @@ CREATE TABLE public.users (
 );
 
 
+
 --
 -- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -3596,6 +3597,15 @@ INSERT INTO us_states VALUES (48, 'Washington', 'WA', 'west');
 INSERT INTO us_states VALUES (49, 'West Virginia', 'WV', 'south');
 INSERT INTO us_states VALUES (50, 'Wisconsin', 'WI', 'midwest');
 INSERT INTO us_states VALUES (51, 'Wyoming', 'WY', 'west');
+
+UPDATE customers 
+SET "createdBy" = 'system';
+
+UPDATE employees 
+SET "createdBy" = 'system';
+
+UPDATE orders
+SET "createdBy" = 'system';
 
 ALTER TABLE ONLY public.categories
     ADD CONSTRAINT pk_categories PRIMARY KEY (category_id);
