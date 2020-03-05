@@ -42,7 +42,7 @@
             <b-button variant="link" :to="'/orders/' + data.item.order_id">
               View
             </b-button>
-            <b-button variant="danger" @click="remove(data.item.order_id)">
+            <b-button v-if="isRecordOwner" variant="danger" @click="remove(data.item.order_id)">
               Delete
             </b-button>
           </template>
@@ -74,12 +74,14 @@
 
 <script>
 import FormTextInput from '~/components/FormTextInput';
+
 export default {
   components: { FormTextInput },
   columns: [
     { key: 'order_id', label: '#', sortable: true },
     { key: 'customer.company_name', label: 'Customer', sortable: true },
     { key: 'employee.name', label: 'Sales Person', sortable: true },
+    'createdBy',
     { key: 'actions', label: 'Actions' }
   ],
   props: {
@@ -160,6 +162,7 @@ export default {
                     }
                     orders(offset: $offset, limit: $limit, order_by: $order_by, where: $where) {
                       order_id
+                      createdBy
                       customer {
                         company_name
                         }
@@ -187,11 +190,11 @@ export default {
         errors = null
       } = await this.$hasura(query, variables);
 
-      this.items = orders.map(o => ({
-        ...o,
+      this.items = orders.map(order => ({
+        ...order,
         employee: {
-          ...o.employee,
-          name: o.employee.first_name + ' ' + o.employee.last_name
+          ...order.employee,
+          name: order.employee.first_name + ' ' + order.employee.last_name
         }
       }));
       this.itemCount = count;

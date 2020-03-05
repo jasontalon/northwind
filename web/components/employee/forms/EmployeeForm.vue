@@ -92,7 +92,7 @@
         </b-form-row>
       </b-col>
     </b-row>
-    <b-button @click="this.save" block :disabled="this.feedbacks"
+    <b-button @click="this.save" block :disabled="this.feedbacks" v-if="canSave"
       >Save</b-button
     >
   </div>
@@ -105,6 +105,7 @@ import FormTextInput from '~/components/FormTextInput';
 import FormTextAreaInput from '~/components/FormTextAreaInput';
 import EmployeeNameSelectInput from '~/components/employee/EmployeeNameSelectInput';
 import TitleSelectInput from '~/components/TitleSelectInput';
+
 export default {
   components: {
     FormTextAreaInput,
@@ -140,7 +141,8 @@ export default {
       'title',
       'title_of_courtesy',
       'reports_to',
-      'reports_to_employee'
+      'reports_to_employee',
+      'createdBy'
     ].reduce((acc, field) => {
       acc[field] = '';
       return acc;

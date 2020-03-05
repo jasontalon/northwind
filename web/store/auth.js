@@ -32,7 +32,8 @@ const _signInAsGuest = async axios => {
 export const actions = {
   setCookieToken({ commit }, access_token) {
     const cookieOptions = {
-      maxAge: 3600 //1 hour
+      maxAge: 3600, //1 hour
+      path: '/'
     };
     //reset cookie
     this.app.$cookies.remove('access_token', cookieOptions);

@@ -50,7 +50,9 @@
       <b-col> <order-details v-model="order_details"></order-details></b-col>
     </b-row>
     <b-row>
-      <b-col> <b-button @click="save" block>Save</b-button></b-col>
+      <b-col>
+        <b-button @click="save" block v-if="canSave">Save</b-button></b-col
+      >
     </b-row>
   </div>
 </template>
@@ -61,6 +63,7 @@ import EmployeeNameSelectInput from '~/components/employee/EmployeeNameSelectInp
 import ShipperNameSelectInput from '~/components/order/ShipperNameSelectInput';
 import ContactForm from '~/components/forms/ContactForm';
 import OrderDetails from '~/components/order/OrderDetails';
+
 export default {
   components: {
     CustomerNameSelectInput,
@@ -99,7 +102,8 @@ export default {
       },
       customer: {
         company_name: ''
-      }
+      },
+      createdBy: ''
     };
   },
   methods: {
@@ -147,7 +151,6 @@ export default {
     this.$watch(
       vm => [..._.values(vm.$data), ..._.values(vm.$data.contact)].join(),
       val => {
-        console.log(this.$data);
         this.$emit('input', this.$data);
       }
     );

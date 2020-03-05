@@ -20,7 +20,7 @@ export default {
       this.$router.push('/customers');
     },
     async load(customer_id) {
-      const query = `query { customers(where: {customer_id: {_eq: "${customer_id}"}}) { address city contact_name contact_title country phone postal_code region company_name customer_id } }`;
+      const query = `query { customers(where: {customer_id: {_eq: "${customer_id}"}}) { address city contact_name contact_title country phone postal_code region company_name customer_id createdBy } }`;
 
       this.customer = this.$_.get(
         await this.$hasura(query),

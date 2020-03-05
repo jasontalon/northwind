@@ -45,7 +45,7 @@
             >
               View
             </b-button>
-            <b-button variant="danger" @click="remove(data.item.customer_id)">
+            <b-button v-if="data.item.createdBy == userId" variant="danger" @click="remove(data.item.customer_id)">
               Delete
             </b-button>
           </template>
@@ -83,6 +83,7 @@ export default {
     { key: 'customer_id', label: '#', sortable: true },
     { key: 'company_name', label: 'Company', sortable: true },
     { key: 'contact_name', label: 'Contact', sortable: true },
+    'createdBy',
     { key: 'actions', label: 'Actions' }
   ],
   props: {
@@ -118,10 +119,7 @@ export default {
         };
       const _ = this.$_;
 
-      const filters = _.pick(JSON.parse(JSON.stringify(this.$data)), [
-          'company_name',
-          'contact_name'
-        ]),
+      const filters = _.pick(this.$data, ['company_name', 'contact_name']),
         _where = _.keys(filters).reduce((acc, filter) => {
           acc[filter] = {
             _ilike: `%${filters[filter]}%`
@@ -153,6 +151,7 @@ export default {
                       customer_id
                       company_name
                       contact_name
+                      createdBy
                     }
                   }
                   `,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Orders</h1>
-    <b-button to="/orders/create">Create</b-button>
+    <b-button v-if="userRole != 'guest'" to="/orders/create">Create</b-button>
     <order-lookup-form show-on-load></order-lookup-form>
   </div>
 </template>

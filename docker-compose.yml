@@ -1,16 +1,5 @@
 version: "3"
 services:
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    restart: always
-    ports:
-      - ${PGADMIN_LISTEN_PORT}
-    depends_on:
-      - "postgres"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_LISTEN_PORT: ${PGADMIN_LISTEN_PORT}
   postgres:
     image: postgres:12-alpine
     restart: always

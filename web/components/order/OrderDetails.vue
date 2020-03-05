@@ -1,16 +1,16 @@
 <template>
   <div>
-    <b-button @click="addNewLine" v-if="this.items.length > 0"
+    <b-button @click="addNewLine" v-if="this.items.length > 0 && canSave"
       >Add another line</b-button
     >
     <b-table show-empty :fields="fields" :items="items">
       <template v-slot:cell(actions)="data">
-        <b-button variant="link" @click="remove(data.item.key)"
+        <b-button variant="link" v-if="isRecordOwner" @click="remove(data.item.key)"
           ><b-icon-trash-fill></b-icon-trash-fill
         ></b-button>
       </template>
       <template v-slot:empty="">
-        <b-button @click="addNewLine" block>Add order line</b-button>
+        <b-button @click="addNewLine" v-if="canSave" block>Add order line</b-button>
       </template>
       <template v-slot:cell(product_id)="data">
         <product-name-select-input

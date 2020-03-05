@@ -1,6 +1,5 @@
 export const actions = {
   async save(store, order) {
-    console.log(order);
     const _ = this.$_;
 
     const products = _.get(
@@ -36,14 +35,15 @@ export const actions = {
           }
           `;
     const variables = {
-      order: { ...this.$_.omit(order, ['order_details', 'ship_phone']) },
+      order: {
+        ...this.$_.omit(order, ['order_details', 'ship_phone', 'createdBy'])
+      },
       details: order.order_details.map(detail => ({
         ...detail,
         order_id: order.order_id
       })),
       deleted_products: deletedProducts
     };
-    console.log(query, variables);
 
     await this.$hasura(query, variables);
   },

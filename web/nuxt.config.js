@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 export default {
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000'
@@ -35,7 +37,8 @@ export default {
     '~/plugins/auth.client.js',
     '~/plugins/shortid.js',
     '~/plugins/lodash.js',
-    '~/plugins/hasura.js'
+    '~/plugins/hasura.js',
+    '~/plugins/auth.mixin.js'
   ],
   /*
    ** Nuxt.js dev-modules
@@ -65,10 +68,10 @@ export default {
 
   proxy: {
     '/gql': {
-      target: 'http://localhost:5433/v1/graphql',
+      target: process.env.HASURA_URL,
       pathRewrite: { '^/gql': '' }
     },
-    '/api': { target: 'http://localhost:3005', pathRewrite: { '^/api': '' } }
+    '/api': { target: process.env.API_URL, pathRewrite: { '^/api': '' } }
   },
   /*
    ** Build configuration

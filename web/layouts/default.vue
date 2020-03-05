@@ -15,7 +15,7 @@
         <!-- Right aligned nav items -->
 
         <hr />
-        <template v-if="this.role != 'guest'">
+        <template v-if="userRole != 'guest'">
           <b-navbar-nav class="ml-auto">
             <b-nav-form>
               <b-form-input
@@ -55,13 +55,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
 export default {
-  computed: mapState({
-    userId: state => state.auth.userId,
-    role: state => state.auth.role
-  })
+  
 };
 </script>
-
-<style></style>

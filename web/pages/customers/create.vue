@@ -1,5 +1,5 @@
 <template>
-  <customer-form :key="this.id" create @save="save"></customer-form>
+  <customer-form create @save="save"></customer-form>
 </template>
 
 <script>
@@ -8,7 +8,7 @@ export default {
   components: { CustomerForm },
   methods: {
     async save(customer) {
-      await this.$store.dispatch('customer/save', customer);
+      await this.$store.dispatch('customer/save', {...customer, customer_id: this.$shortid().toUpperCase()});
       this.$router.push('/customers');
     }
   },
@@ -16,9 +16,6 @@ export default {
     return {
       id: ''
     };
-  },
-  created() {
-    this.id = this.$shortid().toUpperCase();
   }
 };
 </script>

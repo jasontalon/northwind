@@ -5,6 +5,7 @@
         <b-form-row>
           <b-col md="12">
             <form-text-input
+            v-if="!create"
               readonly
               label="Customer #"
               required
@@ -55,7 +56,7 @@
         </b-form-row>
       </b-col>
     </b-row>
-    <b-button @click="this.save" block :disabled="this.feedbacks"
+    <b-button @click="this.save" block :disabled="this.feedbacks" v-if="canSave"
       >Save</b-button
     >
   </div>
@@ -66,7 +67,7 @@ import TitleSelectInput from '~/components/TitleSelectInput';
 import ContactForm from '~/components/forms/ContactForm';
 export default {
   components: { FormTextInput, ContactForm, TitleSelectInput },
-  feedbacks: [],
+  feedbacks: [],  
   props: {
     create: { type: Boolean, default: false },
     update: { type: Boolean, default: false },
@@ -136,7 +137,8 @@ export default {
       'customer_id',
       'company_name',
       'contact_name',
-      'contact_title'
+      'contact_title',
+      'createdBy'
     ].reduce((acc, prop) => {
       acc[prop] = '';
       return acc;

@@ -45,7 +45,7 @@
             >
               View
             </b-button>
-            <b-button variant="danger" @click="remove(data.item.employee_id)">
+            <b-button v-if="isRecordOwner" variant="danger" @click="remove(data.item.employee_id)">
               Delete
             </b-button>
           </template>
@@ -83,6 +83,7 @@ export default {
     { key: 'employee_id', label: '#', sortable: true },
     { key: 'first_name', label: 'First name', sortable: true },
     { key: 'last_name', label: 'Last name', sortable: true },
+    'createdBy',
     { key: 'actions', label: 'Actions' }
   ],
   props: {
@@ -106,6 +107,9 @@ export default {
     };
   },
   computed: {
+    currentUserId() {
+      return this.$store.state.auth.userId;
+    },
     hasFilters() {
       return (
         [this.first_name, this.last_name].filter(Boolean).join().length > 0
@@ -152,6 +156,7 @@ export default {
                       employee_id
                       first_name
                       last_name
+                      createdBy
                     }
                   }
                   `,
