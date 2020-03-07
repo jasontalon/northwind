@@ -38,6 +38,17 @@ services:
       JWT_SECRET: ${API_JWT_SECRET}
       PORT: ${API_PORT}
     command: ["npm", "run", "docker:debug"] #debug mode
+  web:
+    build: ./web
+    ports:
+      - "3003:${WEB_PORT}"
+    restart: unless-stopped
+    depends_on: api
+    environment: 
+      HOST: ${WEB_HOST}
+      PORT: ${WEB_PORT}
+      HASURA_URL: ${WEB_HASURA_URL}
+      API_URL: ${WEB_API_URL}
 volumes:
   db_data:
   backups:
