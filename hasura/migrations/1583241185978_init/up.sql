@@ -32,7 +32,7 @@ CREATE TABLE public.customers (
     city character varying(15),
     region character varying(15),
     postal_code character varying(10),
-    country character varying(15),
+    country character varying(50),
     phone character varying(24),
     fax character varying(24),
     "createdBy" text
@@ -53,7 +53,7 @@ CREATE TABLE public.employees (
     city character varying(15),
     region character varying(15),
     postal_code character varying(10),
-    country character varying(15),
+    country character varying(50),
     home_phone character varying(24),
     extension character varying(4),
     photo bytea,
@@ -83,7 +83,7 @@ CREATE TABLE public.orders (
     ship_city character varying(15),
     ship_region character varying(15),
     ship_postal_code character varying(10),
-    ship_country character varying(15),
+    ship_country character varying(50),
     "createdBy" text
 );
 CREATE TABLE public.products (
@@ -117,7 +117,7 @@ CREATE TABLE public.suppliers (
     city character varying(15),
     region character varying(15),
     postal_code character varying(10),
-    country character varying(15),
+    country character varying(50),
     phone character varying(24),
     fax character varying(24),
     homepage text

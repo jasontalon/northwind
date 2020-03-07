@@ -33,9 +33,11 @@ export const actions = {
   setCookieToken({ commit }, access_token) {
     const cookieOptions = {
       maxAge: 3600, //1 hour
-      path: '/'
+      path: '/',
+      overwrite: true
     };
     //reset cookie
+    console.log('cookie', access_token);
     this.app.$cookies.remove('access_token', cookieOptions);
     this.app.$cookies.set('access_token', access_token, cookieOptions);
     commit('setAccessToken', access_token);
@@ -99,7 +101,9 @@ export const actions = {
   async signOut({ dispatch }) {
     await this.$axios.$post('/api/auth/token/expire');
     const cookieOptions = {
-      maxAge: 3600 //1 hour
+      maxAge: 3600, //1 hour
+      path: '/',
+      overwrite: true
     };
     //reset cookie
     this.app.$cookies.remove('access_token', cookieOptions);

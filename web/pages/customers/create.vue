@@ -1,7 +1,6 @@
 <template>
   <customer-form create @save="save"></customer-form>
 </template>
-
 <script>
 import CustomerForm from '~/components/customer/forms/CustomerForm';
 export default {
@@ -19,5 +18,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

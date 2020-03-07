@@ -1,18 +1,18 @@
 <template>
-  <div>
+  <b-container>
     <h1>Customers</h1>
-    <b-button v-if="userRole != 'guest'" to="/customers/create">Create</b-button>
+    <div class="d-flex justify-content-end">
+      <action-button to="/customers/create">
+        <b-icon-plus />Create New Customer
+      </action-button>
+    </div>
     <customer-lookup-form show-on-load></customer-lookup-form>
-    
-  </div>
+  </b-container>
 </template>
-
 <script>
 import CustomerLookupForm from '~/components/customer/forms/CustomerLookupForm';
 
-export default {  
+export default {
   components: { CustomerLookupForm }
 };
 </script>
-
-<style></style>

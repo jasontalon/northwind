@@ -1,5 +1,6 @@
 <template>
-  <div class="mx-auto" style="max-width:550px;">
+  <b-container class="mx-auto" style="max-width:550px;">
+    <h1>Sign In</h1>
     <sign-in-form
       v-bind:p-username.sync="username"
       v-bind:p-password.sync="password"
@@ -7,7 +8,7 @@
     </sign-in-form>
     <b-button block @click="this.signIn">Sign In</b-button>
     {{ feedback }}
-  </div>
+  </b-container>
 </template>
 
 <script>
@@ -31,7 +32,10 @@ export default {
         password: this.password
       });
       await this.$store.dispatch('auth/validateUser');
-      if (this.feedback.length == 0) this.$router.push('/');
+
+      const { src = '/' } = this.$route.query;
+      console.log(src);
+      if (this.feedback.length == 0) this.$router.push(src);
     }
   }
 };

@@ -22,7 +22,7 @@
               required
               type="text"
               v-model="company_name"
-              maxlength="10"
+              maxlength="40"
               @feedback="setFeedback"
             ></form-text-input>
           </b-col>
@@ -32,7 +32,7 @@
               required
               type="text"
               v-model="contact_name"
-              maxlength="10"
+              maxlength="30"
               @feedback="setFeedback"
             ></form-text-input
           ></b-col>

@@ -42,7 +42,11 @@
             <b-button variant="link" :to="'/orders/' + data.item.order_id">
               View
             </b-button>
-            <b-button v-if="isRecordOwner" variant="danger" @click="remove(data.item.order_id)">
+            <b-button
+              v-if="userId == data.item.createdBy"
+              variant="outline-danger"
+              @click="remove(data.item.order_id)"
+            >
               Delete
             </b-button>
           </template>
@@ -145,7 +149,7 @@ export default {
 
   methods: {
     async remove(orderId) {
-      await this.$store.dispatch('orders/remove', orderId);
+      await this.$store.dispatch('order/remove', orderId);
       await this.search();
     },
     async sortingChanged({ sortBy, sortDesc }) {

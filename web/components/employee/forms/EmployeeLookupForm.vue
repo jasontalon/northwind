@@ -45,7 +45,11 @@
             >
               View
             </b-button>
-            <b-button v-if="isRecordOwner" variant="danger" @click="remove(data.item.employee_id)">
+            <b-button
+              v-if="userId == data.item.createdBy"
+              variant="outline-danger"
+              @click="remove(data.item.employee_id)"
+            >
               Delete
             </b-button>
           </template>
@@ -182,7 +186,7 @@ export default {
       this.isBusy = false;
     }
   },
-  mounted() {
+  created() {
     if (this.$props.showOnLoad) this.search();
   }
 };

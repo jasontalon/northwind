@@ -3,7 +3,6 @@
     <employee-form @save="save"></employee-form>
   </div>
 </template>
-
 <script>
 import EmployeeForm from '~/components/employee/forms/EmployeeForm';
 export default {
@@ -30,5 +29,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

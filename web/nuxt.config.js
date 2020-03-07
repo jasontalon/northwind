@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 
 export default {
   env: {
@@ -38,7 +38,9 @@ export default {
     '~/plugins/shortid.js',
     '~/plugins/lodash.js',
     '~/plugins/hasura.js',
-    '~/plugins/auth.mixin.js'
+    '~/plugins/auth.mixin.js',
+    '~/plugins/bootstrap.icons.js',
+    '~/plugins/custom.components.js'
   ],
   /*
    ** Nuxt.js dev-modules

@@ -42,7 +42,7 @@
       <country-select-input
         v-model="country"
         required
-        maxlength="15"
+        maxlength="50"
         @feedback="setFeedback"
       ></country-select-input>
     </div>
@@ -92,7 +92,7 @@ export default {
     }
   },
   data() {
-    const data = _.pick(
+    const data = this.$_.pick(
       { ...this.$options.fields(), ...this.value },
       this.$_.keys(this.$options.fields())
     );

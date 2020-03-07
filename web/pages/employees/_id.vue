@@ -1,11 +1,15 @@
 <template>
-  <employee-form
-    :key="employee.employee_id"
-    v-model="employee"
-    @save="save"
-  ></employee-form>
+  <div>
+    <b-alert v-if="employee.createdBy != userId" show variant="info"
+      >Read-only. You are not the owner of this record.</b-alert
+    >
+    <employee-form
+      :key="employee.employee_id"
+      v-model="employee"
+      @save="save"
+    ></employee-form>
+  </div>
 </template>
-
 <script>
 import EmployeeForm from '~/components/employee/forms/EmployeeForm';
 export default {
@@ -53,5 +57,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

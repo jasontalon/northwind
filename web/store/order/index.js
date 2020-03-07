@@ -49,6 +49,9 @@ export const actions = {
   },
   async remove(store, orderId) {
     const query = `mutation {
+      delete_order_details(where: {order_id: {_eq: "${orderId}"}}){
+        affected_rows
+      }
       delete_orders(where: {order_id: {_eq: "${orderId}"}}) {
         affected_rows
       }

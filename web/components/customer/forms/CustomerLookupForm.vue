@@ -45,7 +45,7 @@
             >
               View
             </b-button>
-            <b-button v-if="data.item.createdBy == userId" variant="danger" @click="remove(data.item.customer_id)">
+            <b-button v-if="data.item.createdBy == userId" variant="outline-danger" @click="remove(data.item.customer_id)">
               Delete
             </b-button>
           </template>

@@ -1,10 +1,15 @@
 <template>
   <div>
+    <b-alert v-if="order.createdBy != userId" show variant="info"
+      >Read-only. You are not the owner of this record.</b-alert
+    >
     <order-form
       :key="order.order_id"
       v-model="order"
-      @save="onSave"></order-form></div>
-    </template>
+      @save="onSave"
+    ></order-form>
+  </div>
+</template>
 <script>
 import OrderForm from '~/components/order/OrderForm';
 export default {

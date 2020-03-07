@@ -1,5 +1,6 @@
 <template>
   <div class="mx-auto" style="max-width:550px;">
+    <h1>Sign Up</h1>
     <sign-in-form
       v-bind:p-username.sync="username"
       v-bind:p-password.sync="password"
@@ -66,8 +67,9 @@ export default {
         password: this.password
       });
       await this.$store.dispatch('auth/validateUser');
+      const { src = '/' } = this.$route.query;
 
-      if (this.feedback.length == 0) this.$router.push('/');
+      if (this.feedback.length == 0) this.$router.push(src);
     }
   }
 };

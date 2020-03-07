@@ -1,11 +1,14 @@
 <template>
-  <customer-form
-    :key="customer.customer_id"
-    update
-    @save="save"
-    v-model="customer"
-  ></customer-form
-></template>
+  <div>
+     <b-alert v-if="customer.createdBy != userId" show variant="info">Read-only. You are not the owner of this record.</b-alert>
+    <customer-form
+      :key="customer.customer_id"
+      update
+      @save="save"
+      v-model="customer"
+    ></customer-form>
+  </div>
+</template>
 
 <script>
 import CustomerForm from '~/components/customer/forms/CustomerForm';
@@ -34,5 +37,3 @@ export default {
   }
 };
 </script>
-
-<style></style>
