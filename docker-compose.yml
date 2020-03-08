@@ -10,6 +10,10 @@ services:
       - "5432"
     environment: 
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - default
+    labels:
+      - "traefik.enable=false"
   graphql-engine:
     image: hasura/graphql-engine:latest
     ports:
@@ -23,12 +27,14 @@ services:
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: ${HASURA_GRAPHQL_ENABLED_LOG_TYPES}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
       HASURA_GRAPHQL_AUTH_HOOK: ${HASURA_GRAPHQL_AUTH_HOOK}
-      HASURA_GRAPHQL_AUTH_HOOK_MODE: ${HASURA_GRAPHQL_AUTH_HOOK_MODE}
+      HASURA_GRAPHQL_AUTH_HOOK_MODE: ${HASURA_GRAPHQL_AUTH_HOOK_MODE}    
+    networks:
+      - default
+      - proxy
   api:
     build: ./api
     ports:
       - "5434:${API_PORT}"
-      - "5439:9229" #debugging
     volumes:
       - ./api/dist:/api/dist
     restart: unless-stopped
@@ -38,6 +44,8 @@ services:
       JWT_SECRET: ${API_JWT_SECRET}
       PORT: ${API_PORT}
     command: ["npm", "run", "start:prod"] #debug mode
+    networks:
+      - default
   web:
     build: ./web
     ports:
@@ -51,6 +59,18 @@ services:
       PORT: ${WEB_PORT}
       HASURA_URL: ${WEB_HASURA_URL}
       API_URL: ${WEB_API_URL}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.northwind_web.rule=Host(`${PROXY_WEB_HOST}`)"   
+    networks:
+      - default
+      - proxy
 volumes:
   db_data:
   backups:
+networks:
+  default:
+  proxy:
+    external:
+        name: proxy    
